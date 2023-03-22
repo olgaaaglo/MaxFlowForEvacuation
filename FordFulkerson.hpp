@@ -10,123 +10,110 @@
 class FordFulkerson
 {
 public:
-    int computeMaxFlow(Graph& G, int s, int t)
+    int computeMaxFlow(Graph& graph, int s, int t)
     {
-        residualCapacity = G.capacity;
+        residualCapacity = graph.capacity;
 
-        auto p = bfs(residualCapacity, s, t);
-        while (p.size() > 0)
+        auto augmentingPath = bfs(residualCapacity, s, t);
+        while (augmentingPath.size() > 0)
         {
-            auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
-            for (auto v = 1; v < p.size() - 1; ++v)
-            {
-                if (residualCapacity[p[v]][p[v+1]] < augmentingPathCapacity)
-                {
-                    augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
-                }
-            }
+            updateFlow(augmentingPath, graph);
+            updateResidualCapacity(graph);
+            
+            augmentingPath = bfs(residualCapacity, s, t);
+        }
+        return std::accumulate(graph.flow[s].begin(), graph.flow[s].end(), 0); 
+    }
 
-            for (auto v = 0; v < p.size() - 1; ++v)
+private:
+    void updateFlow(const std::deque<int>& p, Graph& graph)
+    {
+        auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
+        for (auto v = 1; v < p.size() - 1; ++v)
+        {
+            if (residualCapacity[p[v]][p[v+1]] < augmentingPathCapacity)
             {
-                if (G.capacity[p[v]][p[v+1]] != 0)
+                augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
+            }
+        }
+
+        for (auto v = 0; v < p.size() - 1; ++v)
+        {
+            if (graph.capacity[p[v]][p[v+1]] != 0)
+            {
+                graph.flow[p[v]][p[v+1]] += augmentingPathCapacity;
+            }
+            else
+            {
+                graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
+            }
+        }
+    }
+
+    void updateResidualCapacity(Graph& graph)
+    {
+        for (auto v = 0; v < graph.capacity.size(); ++v)
+        {
+            for (auto u = 0; u < graph.capacity.size(); ++u)
+            {
+                if (graph.capacity[v][u] != 0)
                 {
-                    G.flow[p[v]][p[v+1]] += augmentingPathCapacity;
+                    residualCapacity[v][u] = graph.capacity[v][u] - graph.flow[v][u];
+                }
+                else if (graph.capacity[u][v] != 0)
+                {
+                    residualCapacity[v][u] = graph.flow[u][v];
                 }
                 else
                 {
-                    G.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
+                    residualCapacity[v][u] = 0;
                 }
             }
-            
-            for (auto v = 0; v < G.capacity.size(); ++v)
-            {
-                for (auto u = 0; u < G.capacity.size(); ++u)
-                {
-                    if (G.capacity[v][u] != 0)
-                    {
-                        residualCapacity[v][u] = G.capacity[v][u] - G.flow[v][u];
-                    }
-                    else if (G.capacity[u][v] != 0)
-                    {
-                        residualCapacity[v][u] = G.flow[u][v];
-                    }
-                    else
-                    {
-                        residualCapacity[v][u] = 0;
-                    }
-                }
-            }
-            
-            p = bfs(residualCapacity, s, t);
         }
-        return std::accumulate(G.flow[0].begin(), G.flow[0].end(), 0); 
-        
     }
-private:
-    bool existsAugmentingPath()
-    {
-        
-        return false;
-    }
-    std::deque<int> bfs(const std::vector<std::vector<int>>& G, int s, int t)
-    {
-        std::vector<int> ds(G.size(), 1000000000); //distance
-        std::vector<int> ps(G.size(), -1); //parent 
 
-        ds[s] = 0;
+    std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, int s, int t)
+    {
+        std::vector<int> parent = getParent(capacity, s, t);
+
+        auto& v = t;
+        std::deque<int> p = {v};
+        while (parent[v] != -1)
+        {
+            v = parent[v];
+            p.push_front(v);
+        }
+            
+        return p.size() == 1 ? std::deque<int>{} : p;
+    }
+
+    std::vector<int> getParent(const std::vector<std::vector<int>>& capacity, int s, int t)
+    {
+        std::vector<int> parent(capacity.size(), -1);
+        std::vector<int> distance(capacity.size(), 1000000000);
+        distance[s] = 0;
+
         std::queue<int> queue;
         queue.push(s);
+
         while (not queue.empty())
         {
             int v = queue.front();
             queue.pop();
             if (v == t)
                 break;
-            for (int u = 0; u < G.size(); ++u)
+            for (int u = 0; u < capacity.size(); ++u)
             {
-                if (G[v][u] != 0 and ds[u] == 1000000000)
+                if (capacity[v][u] != 0 and distance[u] == 1000000000)
                 {
-                    ds[u] = ds[v] + 1;
-                    ps[u] = v;
+                    distance[u] = distance[v] + 1;
+                    parent[u] = v;
                     queue.push(u);
                 }
             }
         }
 
-        auto& v = t;
-        std::deque<int> p = {v};
-        while (ps[v] != -1)
-        {
-            v = ps[v];
-            p.push_front(v);
-        }
-        if (p.size() == 1)
-        {
-            p.clear();
-        }
-            
-        return p;
-    }
-
-    void printVec(const std::vector<int>& V)
-    {
-        for (auto u = 0; u < V.size(); ++u)
-        {
-            std::cout << V[u] << " ";
-        }
-        std::cout << std::endl;
-    }
-    void printVec(const std::vector<std::vector<int>>& V)
-    {
-        for (auto v = 0; v < V.size(); ++v)
-        {
-            for (auto u = 0; u < V[v].size(); ++u)
-            {
-                std::cout << V[v][u] << " ";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
+        return parent;
     }
 
     std::vector<std::vector<int>> residualCapacity;
