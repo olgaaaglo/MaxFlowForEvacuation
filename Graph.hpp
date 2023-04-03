@@ -3,11 +3,12 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 class Graph
 {
 public:
-    Graph(std::vector<std::vector<int>>& cap)
+    Graph(std::vector<std::vector<int>>& cap, int s, int t) : source{s}, sink{t}
     {
         flow.resize(cap.size());
         std::fill(flow.begin(), flow.end(), std::vector<int>(cap.size(), 0));
@@ -35,7 +36,51 @@ public:
         }
         std::cout << std::endl;
     }
-    
+
+    void saveToFile()
+    {
+        std::ofstream file("graph.txt");
+
+        for (auto v = 0; v < capacity.size(); ++v)
+        {
+            for (auto u = 0; u < capacity[v].size(); ++u)
+            {
+                file << capacity[v][u];
+                if (u < capacity[v].size() - 1)
+                {
+                    file << " ";
+                }
+            }
+            file << std::endl;
+        }
+        file << "---" << std::endl;
+        file << source << " " << sink << std::endl;
+
+        file.close();
+    }
+
+    void saveFlowToFile()
+    {
+        std::ofstream file("flow.txt");
+
+        for (auto v = 0; v < flow.size(); ++v)
+        {
+            for (auto u = 0; u < flow[v].size(); ++u)
+            {
+                file << flow[v][u];
+                if (u < flow[v].size() - 1)
+                {
+                    file << " ";
+                }
+            }
+            file << std::endl;
+        }
+
+        file.close();
+    }
+
     std::vector<std::vector<int>> flow;
-    std::vector<std::vector<int>> capacity;  
+    std::vector<std::vector<int>> capacity;
+    int source;
+    int sink;
 };
