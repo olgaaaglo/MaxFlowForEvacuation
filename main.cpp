@@ -80,7 +80,7 @@ int main()
     //     std::cout << fordFulkerson.computeMaxFlow(graph, source_sink[i][0], source_sink[i][1]) << std::endl;
     // }
 
-    int i = 3;
+    int i = 5;
     Graph graph(adjs[i], source_sink[i][0], source_sink[i][1], distance);
     graph.saveToFile();
     FordFulkerson fordFulkerson;

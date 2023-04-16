@@ -43,15 +43,18 @@ private:
             }
         }
 
+        int flowFromAugmentingPath = 0;
         for (auto v = 0; v < p.size() - 1; ++v)
         {
             if (graph.capacity[p[v]][p[v+1]] != 0)
             {
                 graph.flow[p[v]][p[v+1]] += augmentingPathCapacity;
+                flowFromAugmentingPath = augmentingPathCapacity;
             }
             else
             {
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
+                flowFromAugmentingPath = -augmentingPathCapacity;
             }
         }
 
@@ -66,8 +69,15 @@ private:
                 int distance = graph.distance[p[u - 1]][p[u]];
                 if (distance > 0)
                 {
-                    time_sum += distance / 2.0;
-                    time[p[u]] = time_sum + graph.flow[p[u - 1]][p[u]] - 1;
+                    if (time[p[u]] == 0)
+                    {
+                        time_sum += distance / 2.0;
+                        time[p[u]] = time_sum + flowFromAugmentingPath - 1;
+                    }
+                    else 
+                    {
+                        time[p[u]] += flowFromAugmentingPath;
+                    }
                     
                     std::cout << "time = " << time[p[u]] << std::endl;
                 }
