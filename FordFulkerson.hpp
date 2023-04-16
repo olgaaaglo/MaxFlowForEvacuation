@@ -13,6 +13,7 @@ public:
     int computeMaxFlow(Graph& graph, int s, int t)
     {
         residualCapacity = graph.capacity;
+        time.resize(graph.capacity.size());
 
         auto augmentingPath = bfs(residualCapacity, s, t);
         while (augmentingPath.size() > 0)
@@ -23,6 +24,11 @@ public:
             augmentingPath = bfs(residualCapacity, s, t);
         }
         return std::accumulate(graph.flow[s].begin(), graph.flow[s].end(), 0); 
+    }
+
+    void calculateTime()
+    {
+
     }
 
 private:
@@ -48,6 +54,26 @@ private:
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
             }
         }
+
+        std::cout << "path: " << std::endl;
+        int t = 0;
+        double time_sum = 0;
+        for (auto u = 0; u < p.size(); ++u)
+        {
+            std::cout << p[u] << std::endl;
+            if (p[u] != graph.source and p[u] != graph.sink)
+            {
+                int distance = graph.distance[p[u - 1]][p[u]];
+                if (distance > 0)
+                {
+                    time_sum += distance / 2.0;
+                    time[p[u]] = time_sum + graph.flow[p[u - 1]][p[u]] - 1;
+                    
+                    std::cout << "time = " << time[p[u]] << std::endl;
+                }
+            }
+        }
+        std::cout << std::endl;
     }
 
     void updateResidualCapacity(Graph& graph)
@@ -117,4 +143,5 @@ private:
     }
 
     std::vector<std::vector<int>> residualCapacity;
+    std::vector<double> time;
 };

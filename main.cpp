@@ -60,6 +60,18 @@ int main()
       {0, 8}
     };
 
+    std::vector<std::vector<int>> distance = {
+      {0, 0, 0, 0, 0, 0, 2, 0, 0},
+      {0, 0, 0, 0, 0, 2, 0, 0, 0},
+      {0, 0, 0, 0, 0, 2, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 5, 0, 10, 0, 0},
+      {0, 0, 0, 4, 0, 10, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0},
+    };
+
     // for (int i = 0; i < adjs.size(); ++i)
     // {
     //     Graph graph(adjs[i], source_sink[i][0], source_sink[i][1]);
@@ -68,8 +80,8 @@ int main()
     //     std::cout << fordFulkerson.computeMaxFlow(graph, source_sink[i][0], source_sink[i][1]) << std::endl;
     // }
 
-    int i = 5;
-    Graph graph(adjs[i], source_sink[i][0], source_sink[i][1]);
+    int i = 3;
+    Graph graph(adjs[i], source_sink[i][0], source_sink[i][1], distance);
     graph.saveToFile();
     FordFulkerson fordFulkerson;
     std::cout << fordFulkerson.computeMaxFlow(graph, source_sink[i][0], source_sink[i][1]) << std::endl;

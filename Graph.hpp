@@ -8,11 +8,12 @@
 class Graph
 {
 public:
-    Graph(std::vector<std::vector<int>>& cap, int s, int t) : source{s}, sink{t}
+    Graph(std::vector<std::vector<int>>& cap, int s, int t, std::vector<std::vector<int>>& dist) : source{s}, sink{t}
     {
         flow.resize(cap.size());
         std::fill(flow.begin(), flow.end(), std::vector<int>(cap.size(), 0));
         capacity = cap;
+        distance = dist;
     }
 
     void printVec(const std::vector<int>& V)
@@ -81,6 +82,7 @@ public:
 
     std::vector<std::vector<int>> flow;
     std::vector<std::vector<int>> capacity;
+    std::vector<std::vector<int>> distance;
     int source;
     int sink;
 };
