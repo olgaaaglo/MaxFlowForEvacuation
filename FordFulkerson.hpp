@@ -10,20 +10,20 @@
 class FordFulkerson
 {
 public:
-    int computeMaxFlow(Graph& graph, int s, int t)
+    int computeMaxFlow(Graph& graph)
     {
         residualCapacity = graph.capacity;
         time.resize(graph.capacity.size());
 
-        auto augmentingPath = bfs(residualCapacity, s, t);
+        auto augmentingPath = bfs(residualCapacity, graph.source, graph.sink);
         while (augmentingPath.size() > 0)
         {
             updateFlow(augmentingPath, graph);
             updateResidualCapacity(graph);
             
-            augmentingPath = bfs(residualCapacity, s, t);
+            augmentingPath = bfs(residualCapacity, graph.source, graph.sink);
         }
-        return std::accumulate(graph.flow[s].begin(), graph.flow[s].end(), 0); 
+        return std::accumulate(graph.flow[graph.source].begin(), graph.flow[graph.source].end(), 0); 
     }
 
     void calculateTime()
@@ -58,32 +58,32 @@ private:
             }
         }
 
-        std::cout << "path: " << std::endl;
-        int t = 0;
-        double time_sum = 0;
-        for (auto u = 0; u < p.size(); ++u)
-        {
-            std::cout << p[u] << std::endl;
-            if (p[u] != graph.source and p[u] != graph.sink)
-            {
-                int distance = graph.distance[p[u - 1]][p[u]];
-                if (distance > 0)
-                {
-                    if (time[p[u]] == 0)
-                    {
-                        time_sum += distance / 2.0;
-                        time[p[u]] = time_sum + flowFromAugmentingPath - 1;
-                    }
-                    else 
-                    {
-                        time[p[u]] += flowFromAugmentingPath;
-                    }
+        // std::cout << "path: " << std::endl;
+        // int t = 0;
+        // double time_sum = 0;
+        // for (auto u = 0; u < p.size(); ++u)
+        // {
+        //     std::cout << p[u] << std::endl;
+        //     if (p[u] != graph.source and p[u] != graph.sink)
+        //     {
+        //         int distance = graph.distance[p[u - 1]][p[u]];
+        //         if (distance > 0)
+        //         {
+        //             if (time[p[u]] == 0)
+        //             {
+        //                 time_sum += distance / 2.0;
+        //                 time[p[u]] = time_sum + flowFromAugmentingPath - 1;
+        //             }
+        //             else 
+        //             {
+        //                 time[p[u]] += flowFromAugmentingPath;
+        //             }
                     
-                    std::cout << "time = " << time[p[u]] << std::endl;
-                }
-            }
-        }
-        std::cout << std::endl;
+        //             std::cout << "time = " << time[p[u]] << std::endl;
+        //         }
+        //     }
+        // }
+        // std::cout << std::endl;
     }
 
     void updateResidualCapacity(Graph& graph)
