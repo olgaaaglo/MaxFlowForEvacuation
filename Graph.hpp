@@ -22,9 +22,120 @@ public:
         distance = dist;
     }
 
-    Graph(std::vector<std::vector<std::pair<int, int>>> adj, std::vector<std::pair<int, int>> nodes, int T)
+    Graph(std::vector<std::vector<std::pair<int, int>>>& adj, std::vector<std::pair<int, int>>& nodes, int time_intervals) : T{time_intervals}
     {
+        const int dynamic_net_size = nodes.size() * (T + 1) + 2;
 
+        capacity.resize(dynamic_net_size, std::vector<int>(std::vector<int>(dynamic_net_size)));
+        node_id.resize(dynamic_net_size);
+
+        assignSourceToStartNodesArcs(nodes);
+        assignArcsInside(adj, nodes, dynamic_net_size);
+        assignEndNodesToSinkArcs(adj, dynamic_net_size);
+
+        flow.resize(dynamic_net_size);
+        std::fill(flow.begin(), flow.end(), std::vector<int>(dynamic_net_size, 0));
+    }
+
+    void assignSourceToStartNodesArcs(std::vector<std::pair<int, int>>& nodes)
+    {
+        source = 0;
+        node_id[source] = 0;
+        int start_node_id = 1;
+        for (int i = 0; i < nodes.size(); ++i)
+        {
+            if (nodes[i].first > 0)
+            {
+                capacity[source][start_node_id] = nodes[i].first;
+            }
+            ++start_node_id;
+        }
+    }
+
+    void assignArcsInside(std::vector<std::vector<std::pair<int, int>>>& adj, std::vector<std::pair<int, int>>& nodes, int dynamic_net_size)
+    {
+        int initial_node_nr = 1;
+        int t = 0;
+        for (int i = 1; i < dynamic_net_size; ++i)
+        {
+            if (i % adj.size() == 0)
+            {
+                ++t;
+                initial_node_nr = 1;
+            }
+            else 
+            {
+                node_id[i] = initial_node_nr*10 + t;
+                if (t < T)
+                {
+                    const auto& initial_node_nr_id = initial_node_nr - 1;
+                    capacity[i][i + T] = nodes[initial_node_nr_id].second;
+
+                    for (int j = 0; j < adj.size(); ++j)
+                    {
+                        if (adj[initial_node_nr_id][j].first != 0)
+                        {
+                            const auto& time = adj[initial_node_nr_id][j].first;
+                            if (t + time <= T)
+                            {
+                                const auto& cap = adj[initial_node_nr_id][j].second;
+                                capacity[i][i + time * T + (j - initial_node_nr_id)] = cap;
+                            }
+                        }
+                    
+                    }
+                }
+                ++initial_node_nr;
+            }
+        }
+    }
+
+    void assignEndNodesToSinkArcs(std::vector<std::vector<std::pair<int, int>>>& adj, int dynamic_net_size)
+    {
+        int t = 1;
+        node_id[T] = adj.size() * 10;
+        sink = dynamic_net_size - 1;
+        for (int i = 2 * T; i <= (T + 1) * T; i += T)
+        {
+            node_id[i] = adj.size() * 10 + t;
+            capacity[i][sink] = infinity;
+            ++t;
+        }
+        node_id[sink] = adj.size() + 1;
+    }
+
+    void printAdjAndCapacityForNodes()
+    {
+        for (int i = 0; i < capacity.size(); ++i)
+        {
+            std::cout << "id: " << node_id[i] << std::endl;
+            for (int j = 0; j < capacity.size(); ++j)
+            {
+                if (capacity[i][j] != 0)
+                {
+                    std::cout << "adj: " << j << ", id:" << node_id[j] << std::endl;
+                    std::cout << "capacity: " << capacity[i][j] << std::endl;
+                }
+
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    void printTimesForFlows()
+    {
+        int t = 1;
+        for (int i = 2 * T; i <= (T + 1) * T; i += T)
+        {
+            if (flow[i][sink] != 0)
+            {
+                std::cout << "id: " << node_id[i] 
+                    << " - " << flow[i][sink] << " people " 
+                    << "evacuated in " << t * 5 << "s" << std::endl;
+                std::cout << std::endl;
+            }
+            ++t;
+        }
     }
 
     void printVec(const std::vector<int>& V)
@@ -94,6 +205,7 @@ public:
     std::vector<std::vector<int>> flow;
     std::vector<std::vector<int>> capacity;
     std::vector<std::vector<int>> distance;
+    std::vector<int> node_id;
     int source;
     int sink;
     int T;
