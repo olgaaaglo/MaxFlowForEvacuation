@@ -13,23 +13,17 @@ public:
     int computeMaxFlow(Graph& graph)
     {
         residualCapacity = graph.capacity;
-        // time.resize(graph.capacity.size());
 
-        auto augmentingPath = bfs(residualCapacity, graph.source, graph.sink);
+        auto augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id);
         while (augmentingPath.size() > 0)
         {
             updateFlow(augmentingPath, graph);
             updateResidualCapacity(graph);
             
-            augmentingPath = bfs(residualCapacity, graph.source, graph.sink);
+            augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id);
         }
         return std::accumulate(graph.flow[graph.source].begin(), graph.flow[graph.source].end(), 0); 
     }
-
-    // void calculateTime()
-    // {
-
-    // }
 
 private:
     void updateFlow(const std::deque<int>& p, Graph& graph)
@@ -43,47 +37,17 @@ private:
             }
         }
 
-        // int flowFromAugmentingPath = 0;
         for (auto v = 0; v < p.size() - 1; ++v)
         {
             if (graph.capacity[p[v]][p[v+1]] != 0)
             {
                 graph.flow[p[v]][p[v+1]] += augmentingPathCapacity;
-                // flowFromAugmentingPath = augmentingPathCapacity;
             }
             else
             {
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
-                // flowFromAugmentingPath = -augmentingPathCapacity;
             }
         }
-
-        // std::cout << "path: " << std::endl;
-        // int t = 0;
-        // double time_sum = 0;
-        // for (auto u = 0; u < p.size(); ++u)
-        // {
-        //     std::cout << p[u] << std::endl;
-        //     if (p[u] != graph.source and p[u] != graph.sink)
-        //     {
-        //         int distance = graph.distance[p[u - 1]][p[u]];
-        //         if (distance > 0)
-        //         {
-        //             if (time[p[u]] == 0)
-        //             {
-        //                 time_sum += distance / 2.0;
-        //                 time[p[u]] = time_sum + flowFromAugmentingPath - 1;
-        //             }
-        //             else 
-        //             {
-        //                 time[p[u]] += flowFromAugmentingPath;
-        //             }
-                    
-        //             std::cout << "time = " << time[p[u]] << std::endl;
-        //         }
-        //     }
-        // }
-        // std::cout << std::endl;
     }
 
     void updateResidualCapacity(Graph& graph)
@@ -108,7 +72,7 @@ private:
         }
     }
 
-    std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, int s, int t)
+    std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, int s, int t, const std::vector<int>& node_id)
     {
         std::vector<int> parent = getParent(capacity, s, t);
 
@@ -119,10 +83,10 @@ private:
             v = parent[v];
             p.push_front(v);
         }
-        std::cout << "p: " << std::endl;
+        std::cout << "path: " << std::endl;
         for (auto u = 0; u < p.size(); ++u)
         {
-            std::cout << p[u] << " ";
+            std::cout << node_id[p[u]] << " ";
         }
         std::cout << std::endl;
             

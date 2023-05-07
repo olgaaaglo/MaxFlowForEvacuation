@@ -70,7 +70,7 @@ public:
                 if (t < T)
                 {
                     const auto& initial_node_nr_id = initial_node_nr - 1;
-                    capacity[i][i + T] = nodes[initial_node_nr_id].second;
+                    capacity[i][i + nrNodes] = nodes[initial_node_nr_id].second;
 
                     for (int j = 0; j < nrNodes; ++j)
                     {
@@ -80,7 +80,7 @@ public:
                             if (t + time <= T)
                             {
                                 const auto& cap = adj[initial_node_nr_id][j].second;
-                                capacity[i][i + time * T + (j - initial_node_nr_id)] = cap;
+                                capacity[i][i + time * nrNodes + (j - initial_node_nr_id)] = cap;
                             }
                         }
                     
