@@ -22,7 +22,8 @@ public:
         distance = dist;
     }
 
-    Graph(std::vector<std::vector<std::pair<int, int>>>& adj, std::vector<std::pair<int, int>>& nodes, int time_intervals) : T{time_intervals}
+    Graph(std::vector<std::vector<std::pair<int, int>>>& adj, std::vector<std::pair<int, int>>& nodes, int nr_time_intervals, int t) 
+        : T{nr_time_intervals}, time_interval{t}, nrNodes{nodes.size()}
     {
         const int dynamic_net_size = nodes.size() * (T + 1) + 2;
 
@@ -58,7 +59,7 @@ public:
         int t = 0;
         for (int i = 1; i < dynamic_net_size; ++i)
         {
-            if (i % adj.size() == 0)
+            if (i % nrNodes == 0)
             {
                 ++t;
                 initial_node_nr = 1;
@@ -71,7 +72,7 @@ public:
                     const auto& initial_node_nr_id = initial_node_nr - 1;
                     capacity[i][i + T] = nodes[initial_node_nr_id].second;
 
-                    for (int j = 0; j < adj.size(); ++j)
+                    for (int j = 0; j < nrNodes; ++j)
                     {
                         if (adj[initial_node_nr_id][j].first != 0)
                         {
@@ -93,15 +94,15 @@ public:
     void assignEndNodesToSinkArcs(std::vector<std::vector<std::pair<int, int>>>& adj, int dynamic_net_size)
     {
         int t = 1;
-        node_id[T] = adj.size() * 10;
+        node_id[nrNodes] = nrNodes * 10;
         sink = dynamic_net_size - 1;
-        for (int i = 2 * T; i <= (T + 1) * T; i += T)
+        for (int i = 2 * nrNodes; i <= (T + 1) * nrNodes; i += nrNodes)
         {
-            node_id[i] = adj.size() * 10 + t;
+            node_id[i] = nrNodes * 10 + t;
             capacity[i][sink] = infinity;
             ++t;
         }
-        node_id[sink] = adj.size() + 1;
+        node_id[sink] = nrNodes + 1;
     }
 
     void printAdjAndCapacityForNodes()
@@ -125,13 +126,13 @@ public:
     void printTimesForFlows()
     {
         int t = 1;
-        for (int i = 2 * T; i <= (T + 1) * T; i += T)
+        for (int i = 2 * nrNodes; i <= (T + 1) * nrNodes; i += nrNodes)
         {
             if (flow[i][sink] != 0)
             {
                 std::cout << "id: " << node_id[i] 
                     << " - " << flow[i][sink] << " people " 
-                    << "evacuated in " << t * 5 << "s" << std::endl;
+                    << "evacuated in " << t * time_interval << "s" << std::endl;
                 std::cout << std::endl;
             }
             ++t;
@@ -210,4 +211,6 @@ public:
     int sink;
     int T;
     const int infinity{1000000};
+    int time_interval;
+    uint64_t nrNodes;
 };
