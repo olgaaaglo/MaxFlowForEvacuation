@@ -59,16 +59,18 @@ pos = nx.spring_layout(graph, iterations=100)
 num_nodes_same_dist = np.zeros(len(distances))
 max_dist = np.max(distances[s])
 for i in range(len(pos)):
-	pos[i][0] = distances[s][i]
-	num_nodes_same_dist[int(distances[s][i])] += 1
+	if distances[s][i] < 1000000:
+		pos[i][0] = distances[s][i]
+		num_nodes_same_dist[int(distances[s][i])] += 1
 
 index_nodes = np.ones(len(distances))
 for i in range(len(pos)):
-	index = int(distances[s][i])
-	pos[i][1] = index_nodes[index] * max_dist / num_nodes_same_dist[index]
-	if i != s and i != t:
-		pos[i][1] += max_dist / 2.0
-	index_nodes[index] += 1
+	if distances[s][i] < 1000000:
+		index = int(distances[s][i])
+		pos[i][1] = index_nodes[index] * max_dist / num_nodes_same_dist[index]
+		if i != s and i != t:
+			pos[i][1] += max_dist / 2.0
+		index_nodes[index] += 1
 
 
 nx.draw(graph, pos, with_labels=True, font_size=8, node_color='#a1b56c')

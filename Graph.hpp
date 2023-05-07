@@ -22,6 +22,11 @@ public:
         distance = dist;
     }
 
+    Graph(std::vector<std::vector<std::pair<int, int>>> adj, std::vector<std::pair<int, int>> nodes, int T)
+    {
+
+    }
+
     void printVec(const std::vector<int>& V)
     {
         for (auto u = 0; u < V.size(); ++u)
@@ -91,4 +96,6 @@ public:
     std::vector<std::vector<int>> distance;
     int source;
     int sink;
+    int T;
+    const int infinity{1000000};
 };
