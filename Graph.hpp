@@ -66,7 +66,7 @@ public:
             }
             else 
             {
-                node_id[i] = initial_node_nr*10 + t;
+                node_id[i] = initial_node_nr * 100 + t;
                 if (t < T)
                 {
                     const auto& initial_node_nr_id = initial_node_nr - 1;
@@ -94,11 +94,11 @@ public:
     void assignEndNodesToSinkArcs(std::vector<std::vector<std::pair<int, int>>>& adj, int dynamic_net_size)
     {
         int t = 1;
-        node_id[nrNodes] = nrNodes * 10;
+        node_id[nrNodes] = nrNodes * 100;
         sink = dynamic_net_size - 1;
         for (int i = 2 * nrNodes; i <= (T + 1) * nrNodes; i += nrNodes)
         {
-            node_id[i] = nrNodes * 10 + t;
+            node_id[i] = nrNodes * 100 + t;
             capacity[i][sink] = infinity;
             ++t;
         }
