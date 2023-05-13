@@ -13,15 +13,18 @@ public:
     int computeMaxFlow(Graph& graph)
     {
         residualCapacity = graph.capacity;
+        std::ofstream pathFile("path.txt");
 
-        auto augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id);
+        auto augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id, pathFile);
         while (augmentingPath.size() > 0)
         {
             updateFlow(augmentingPath, graph);
             updateResidualCapacity(graph);
             
-            augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id);
+            augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id, pathFile);
         }
+
+        pathFile.close();
         return std::accumulate(graph.flow[graph.source].begin(), graph.flow[graph.source].end(), 0); 
     }
 
@@ -72,7 +75,7 @@ private:
         }
     }
 
-    std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, int s, int t, const std::vector<int>& node_id)
+    std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, int s, int t, const std::vector<int>& node_id, std::ofstream& pathFile)
     {
         std::vector<int> parent = getParent(capacity, s, t);
 
@@ -83,12 +86,13 @@ private:
             v = parent[v];
             p.push_front(v);
         }
-        std::cout << "path: " << std::endl;
+        
+        pathFile << "path: " << std::endl;
         for (auto u = 0; u < p.size(); ++u)
         {
-            std::cout << node_id[p[u]] << " ";
+            pathFile << node_id[p[u]] << " ";
         }
-        std::cout << std::endl;
+        pathFile << std::endl;
             
         return p.size() == 1 ? std::deque<int>{} : p;
     }
@@ -123,5 +127,4 @@ private:
     }
 
     std::vector<std::vector<int>> residualCapacity;
-    // std::vector<double> time;
 };

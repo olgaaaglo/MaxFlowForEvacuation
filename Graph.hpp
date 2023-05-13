@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <map>
+#include <string>
 
 class Graph
 {
@@ -105,26 +107,31 @@ public:
         node_id[sink] = nrNodes + 1;
     }
 
-    void printAdjAndCapacityForNodes()
+    void saveAdjAndCapacityForNodesToFile()
     {
+        std::ofstream file("adjAndCapacity.txt");
+
         for (int i = 0; i < capacity.size(); ++i)
         {
-            std::cout << "id: " << node_id[i] << std::endl;
+            file << "id: " << node_id[i] << std::endl;
             for (int j = 0; j < capacity.size(); ++j)
             {
                 if (capacity[i][j] != 0)
                 {
-                    std::cout << "adj: " << j << ", id:" << node_id[j] << std::endl;
-                    std::cout << "capacity: " << capacity[i][j] << std::endl;
+                    file << "adj: " << j << ", id:" << node_id[j] << std::endl;
+                    file << "capacity: " << capacity[i][j] << std::endl;
                 }
 
             }
-            std::cout << std::endl;
+            file << std::endl;
         }
+
+        file.close();
     }
 
     void printTimesForFlows()
     {
+        std::ofstream file("peopleEvacuatedInTimeUnit.txt");
         int t = 1;
         for (int i = 2 * nrNodes; i <= (T + 1) * nrNodes; i += nrNodes)
         {
@@ -133,9 +140,33 @@ public:
                 std::cout << "id: " << node_id[i] 
                     << " - " << flow[i][sink] << " people " 
                     << "evacuated in " << t * time_interval << "s" << std::endl;
-                std::cout << std::endl;
+                file << t * time_interval << " " << flow[i][sink] << std::endl;
             }
             ++t;
+        }
+        std::cout << std::endl;
+        file.close();
+    }
+
+    void printNrPeopleInEachExit() 
+    {
+        std::ofstream file("nrPeopleInEachExit.txt");
+        std::map<std::string, int> countNrPeopleInEachExit;
+        for (int i = 2 * nrNodes; i <= (T + 1) * nrNodes; i += nrNodes)
+        {
+            for (int j = 0; j < flow.size(); ++j)
+            {
+                if (flow[j][i] != 0)
+                {
+                    const auto label = std::to_string(node_id[j] / 100) + " - " + std::to_string(node_id[i] / 100);
+                    countNrPeopleInEachExit[label] += flow[j][i];
+                }
+            }
+        }
+        for (const auto& [label, value] : countNrPeopleInEachExit)
+        {
+           std::cout << "Exit " << label << " -> " << value << " people" << std::endl; 
+           file << label << "," << value << std::endl;
         }
     }
 
