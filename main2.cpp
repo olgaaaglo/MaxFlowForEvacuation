@@ -11,6 +11,7 @@ int main()
 
   const int T1 = 4;
 
+  //travel time, arc capacity
   std::vector<std::vector<std::pair<int, int>>> adj1 = {
       {{0, 0}, {1, 2}, {1, 2}, {0, 0}},
       {{0, 0}, {0, 0}, {1, 2}, {2, 3}},
@@ -18,6 +19,7 @@ int main()
       {{0, 0}, {0, 0}, {0, 0}, {0, 0}},
   };
 
+  //initial content, node capacity
   std::vector<std::pair<int, int>> nodes1 = {
     {{3, 5}, {4, 8}, {3, 20}, {0, infinity}}
   };
@@ -135,11 +137,12 @@ int main()
 
 ////////////////////////////////////////////////////////////
 
-    Graph& graph = graph3;
+    Graph& graph = graph2;
     graph.saveAdjAndCapacityForNodesToFile();    
     FordFulkerson fordFulkerson;
     std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
     graph.printTimesForFlows();
     graph.printNrPeopleInEachExit();
+    graph.saveToFile();
 
 }

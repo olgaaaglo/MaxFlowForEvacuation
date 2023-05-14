@@ -208,10 +208,22 @@ public:
             }
             file << std::endl;
         }
-        file << "---" << std::endl;
-        file << source << " " << sink << std::endl;
+        // file << "---" << std::endl;
+        // file << source << " " << sink << std::endl;
 
         file.close();
+
+        std::ofstream node_file("node_id.txt");
+        for (auto u = 0; u < node_id.size(); ++u)
+        {
+            node_file << node_id[u];
+            if (u < node_id.size() - 1)
+            {
+                node_file << " ";
+            }
+        }
+        node_file << std::endl;
+        node_file.close();
     }
 
     void saveFlowToFile()
