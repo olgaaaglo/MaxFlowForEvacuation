@@ -3,14 +3,14 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 adj = []
-with open('graph.txt') as file:
+with open('../out/graph.txt') as file:
     for line in file:
         vertex = [int(l.strip()) for l in line.split(' ')]
         adj.append(vertex)
 adj = np.array(adj)
 
 node_id = []
-with open('node_id.txt') as file:
+with open('../out/node_id.txt') as file:
     for line in file:
         node_id = [int(l.strip()) for l in line.split(' ')]
         break
@@ -37,4 +37,4 @@ nx.draw_networkx_edge_labels(graph, pos, font_size=10, edge_labels=labels)
 nx.draw_networkx_labels(graph, pos, labels=node_attrs)
 
 plt.draw()
-plt.savefig('graph_time_expanded.png')
+plt.savefig('../charts/graph_time_expanded.png')

@@ -5,7 +5,7 @@ times = []
 people = []
 cumulatedPeople = []
 i = 0
-with open('peopleEvacuatedInTimeUnit.txt') as file:
+with open('../out/peopleEvacuatedInTimeUnit.txt') as file:
     for line in file:
         splited = line.split(' ')
         times.append(int(splited[0]))
@@ -19,20 +19,20 @@ with open('peopleEvacuatedInTimeUnit.txt') as file:
 plt.bar(times, people)
 plt.xlabel("Liczba sekund")
 plt.ylabel("Liczba ludzi ewakuowanych")
-plt.savefig('peopleEvacuatedInTimeUnit.png')
+plt.savefig('../charts/peopleEvacuatedInTimeUnit.png')
 plt.clf()
 
 plt.bar(times, cumulatedPeople)
 plt.xlabel("Liczba sekund")
 plt.ylabel("Skumulowana liczba ludzi ewakuowanych")
-plt.savefig('cumulatedPeopleEvacuatedInTimeUnit.png')
+plt.savefig('../charts/cumulatedPeopleEvacuatedInTimeUnit.png')
 plt.clf()
 
 ################################
 
 labels = []
 people = []
-with open('nrPeopleInEachExit.txt') as file:
+with open('../out/nrPeopleInEachExit.txt') as file:
     for line in file:
         splited = line.split(',')
         labels.append(splited[0])
@@ -41,5 +41,5 @@ with open('nrPeopleInEachExit.txt') as file:
 plt.bar(labels, people)
 plt.xlabel("Wyjścia ewakuacyjne")
 plt.ylabel("Liczba ludzi ewakuowanych")
-plt.savefig('nrPeopleInEachExit.png')
+plt.savefig('../charts/nrPeopleInEachExit.png')
 plt.clf()

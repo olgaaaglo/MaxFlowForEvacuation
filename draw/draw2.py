@@ -17,33 +17,6 @@ nodes1 = [
     [3, 5], [4, 8], [3, 20], [0, infinity]
 ]
 
-# adj2 = [
-#     [[0, 0], [15, 15], [10, 15], [10, 15], [0, 0], [0, 0], [0, 0]],
-#     [[0, 0], [0, 0], [0, 0], [0, 0], [1, 5], [0, 0], [0, 0]],
-#     [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [1, 5], [0, 0]],
-#     [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [1, 5], [0, 0]],
-#     [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [2, 3], [2, 6]],
-#     [[0, 0], [0, 0], [0, 0], [0, 0], [2, 3], [0, 0], [1, 2]],
-#     [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
-# ]
-
-# nodes2 = [
-#     [0, 0], [15, 15], [10, 15], [10, 15], [0, 1], [0, 1], [0, infinity]
-# ]
-
-adj2 = [
-        [[0, 0], [0, 0], [0, 0], [1, 5], [0, 0], [0, 0]],
-        [[0, 0], [0, 0], [0, 0], [0, 0], [1, 5], [0, 0]],
-        [[0, 0], [0, 0], [0, 0], [0, 0], [1, 5], [0, 0]],
-        [[0, 0], [0, 0], [0, 0], [0, 0], [2, 3], [2, 6]],
-        [[0, 0], [0, 0], [0, 0], [2, 3], [0, 0], [1, 2]],
-        [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
-    ]
-
-nodes2 = [
-        [15, 15], [10, 15], [10, 15], [0, 1], [0, 1], [0, infinity]
-    ]
-
 def FloydWarshall(graph):
 	inf = 1000000
 	N = len(graph)
@@ -132,27 +105,48 @@ def drawGraph(adjacency, nodes):
     nx.draw_networkx_labels(graph, pos_attrs, labels=node_attrs)
 
     plt.draw()
-    plt.savefig('graph.png')
+    plt.savefig('../charts/graph.png')
+
+def readAdj():
+    adj = []
+    with open('../input/adj.txt') as file:
+        for line in file:
+            splited = line.split(' ')
+            vertices = [s.split(',') for s in splited]
+            adj.append(vertices)
+    adj = np.array(adj).astype(int).tolist()
+    return adj
+
+def readNodes():
+    nodes = []
+    with open('../input/nodes.txt') as file:
+        for line in file:
+            vertex = line.split(' ')
+            nodes.append(vertex)
+    nodes = np.array(nodes).astype(int).tolist()
+    return nodes
+
+def addNode0ToAdj(adj, nodes):
+    adj_node0 = [[0, 0]]
+    for i in range(len(nodes)):
+        if nodes[i][0] != 0:
+            adj_node0.append([nodes[i][0], nodes[i][1]])
+        else:
+            adj_node0.append([0, 0])
+
+    adj_new = [adj_node0]
+    for i in range(len(adj)):
+        adj2_i = [[0, 0]] + adj[i]
+        adj_new.append(adj2_i)
+
+    return adj_new
 
 # drawGraph(adj1, nodes1)
 
-adj2_node0 = [[0, 0]]
-for i in range(len(nodes2)):
-    if nodes2[i][0] != 0:
-        adj2_node0.append([nodes2[i][0], nodes2[i][1]])
-    else:
-        adj2_node0.append([0, 0])
+adj = readAdj()
+nodes = readNodes()
 
-print(adj2_node0)
+adj = addNode0ToAdj(adj, nodes)
+nodes = [[0, 0]] + nodes
 
-adj2_2 = [adj2_node0]
-for i in range(len(adj2)):
-    adj2_i = [[0, 0]] + adj2[i]
-    adj2_2.append(adj2_i)
-
-print(adj2_2)
-
-nodes2_2 = [[0, 0]] + nodes2
-print(nodes2_2)
-
-drawGraph(adj2_2, nodes2_2)
+drawGraph(adj, nodes)
