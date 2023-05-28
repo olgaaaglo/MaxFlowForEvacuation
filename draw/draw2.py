@@ -56,9 +56,13 @@ def getAdj(adjacency):
 
 def getEdgesLabels(graph, adjacency):
     labels = nx.get_edge_attributes(graph,'weight')
-    for label in labels:
+    for i, label in enumerate(labels):
         capacity = labels[label]
-        labels[label] = "(" + str(adjacency[label[0]][label[1]][0]) + ", " + str(capacity) + ")"
+        if capacity != 15:
+            labels[label] = "(" + str(adjacency[label[0]][label[1]][0]) + ", " + str(capacity) + ")"
+        else:
+            labels[label] = ""
+        print(labels[label], i)
     return labels
 
 def getNodesPositions(pos, adj):
@@ -97,7 +101,13 @@ def drawGraph(adjacency, nodes):
 
     node_attrs = {}
     for node in graph.nodes:
-        node_attrs[node] = "{" + str(nodes[node][0]) + ", " + str(nodes[node][1]) + "}"
+        if node != 0:
+            capacity = str(nodes[node][1])
+            if capacity == "1000000":
+                capacity = "inf"
+            node_attrs[node] = "{" + str(nodes[node][0]) + ", " + capacity + "}"
+        else:
+            node_attrs[node] = ""
 
 
     nx.draw(graph, pos, with_labels=True, font_size=8, node_color='#a1b56c')
@@ -145,6 +155,7 @@ def addNode0ToAdj(adj, nodes):
 
 adj = readAdj()
 nodes = readNodes()
+print(adj, nodes)
 
 adj = addNode0ToAdj(adj, nodes)
 nodes = [[0, 0]] + nodes
