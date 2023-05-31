@@ -8,6 +8,7 @@
 #include <string>
 #include <cstdint>
 #include <filesystem>
+#include <numeric>
 
 class Graph
 {
@@ -18,12 +19,13 @@ public:
         std::fill(flow.begin(), flow.end(), std::vector<int>(cap.size(), 0));
         capacity = cap;
     }
-    Graph(std::vector<std::vector<int>>& cap, int s, int t, std::vector<std::vector<int>>& dist) : source{s}, sink{t}
+    Graph(std::vector<std::vector<int>>& cap, int s, int t, std::vector<std::vector<int>>& time, int nr_time_intervals)
+        : capacity{cap}, source{s}, sink{t}, cost{time}, T{nr_time_intervals}
     {
         flow.resize(cap.size());
         std::fill(flow.begin(), flow.end(), std::vector<int>(cap.size(), 0));
-        capacity = cap;
-        distance = dist;
+        node_id.resize(cap.size());
+        std::iota(node_id.begin(), node_id.end(), 0);
     }
 
     Graph(std::vector<std::vector<std::pair<int, int>>>& adj, std::vector<std::pair<int, int>>& nodes, int nr_time_intervals, int t) 
@@ -293,7 +295,6 @@ public:
 
     std::vector<std::vector<int>> flow;
     std::vector<std::vector<int>> capacity;
-    std::vector<std::vector<int>> distance;
     std::vector<std::vector<int>> cost;
     std::vector<int> node_id;
     int source;

@@ -151,7 +151,7 @@ int main()
 
     Graph& graph = graph2;
     MinimumCost minimumCost;
-    std::cout << "Max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
+    std::cout << "Min cost max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
     graph.printTimesForFlows();
     graph.printNrPeopleInEachExit();
 

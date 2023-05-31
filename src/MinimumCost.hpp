@@ -30,6 +30,8 @@ public:
         return std::accumulate(graph.flow[graph.source].begin(), graph.flow[graph.source].end(), 0); 
     }
 
+    int maxDynamicFlow{0};
+
 private:
     void updateFlow(const std::deque<int>& p, Graph& graph)
     {
@@ -42,6 +44,7 @@ private:
             }
         }
 
+        int chainTravelTime{0};
         for (auto v = 0; v < p.size() - 1; ++v)
         {
             if (graph.capacity[p[v]][p[v+1]] != 0)
@@ -52,7 +55,14 @@ private:
             {
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
             }
+            
+            // std::cout << "cost " << graph.cost[p[v]][p[v+1]] << std::endl;
+            chainTravelTime += graph.cost[p[v]][p[v+1]];
         }
+
+        int repeatChain = graph.T + 1 - chainTravelTime;
+        maxDynamicFlow += repeatChain * augmentingPathCapacity;
+        // std::cout << "maxDynamicFlow " << augmentingPathCapacity << " " << chainTravelTime << " " << repeatChain << " " << maxDynamicFlow << std::endl;
     }
 
     void updateResidualCapacity(Graph& graph)
