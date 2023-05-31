@@ -6,6 +6,8 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <cstdint>
+#include <filesystem>
 
 class Graph
 {
@@ -27,15 +29,21 @@ public:
     Graph(std::vector<std::vector<std::pair<int, int>>>& adj, std::vector<std::pair<int, int>>& nodes, int nr_time_intervals, int t) 
         : T{nr_time_intervals}, time_interval{t}, nrNodes{nodes.size()}
     {
+        std::filesystem::create_directory("../input");
+        std::filesystem::create_directory("../out");
+        std::filesystem::create_directory("../charts");
+
         const int dynamic_net_size = nodes.size() * (T + 1) + 2;
 
         capacity.resize(dynamic_net_size, std::vector<int>(std::vector<int>(dynamic_net_size)));
+        cost.resize(dynamic_net_size, std::vector<int>(std::vector<int>(dynamic_net_size)));
         node_id.resize(dynamic_net_size);
 
         assignSourceToStartNodesArcs(nodes);
         assignArcsInside(adj, nodes, dynamic_net_size);
         assignEndNodesToSinkArcs(adj, dynamic_net_size);
 
+        assignCost();
         flow.resize(dynamic_net_size);
         std::fill(flow.begin(), flow.end(), std::vector<int>(dynamic_net_size, 0));
     }
@@ -105,6 +113,20 @@ public:
             ++t;
         }
         node_id[sink] = nrNodes + 1;
+    }
+
+    void assignCost()
+    {
+        for (int i = 0; i < capacity.size(); ++i)
+        {
+            for (int j = 0; j < capacity.size(); ++j)
+            {
+                if (capacity[i][j] > 0 and node_id[j] == 7)
+                {
+                    cost[i][j] = node_id[i] % 100;
+                }
+            }
+        }
     }
 
     void saveInputToFile(std::vector<std::vector<std::pair<int, int>>>& adj, std::vector<std::pair<int, int>>& nodes)
@@ -272,6 +294,7 @@ public:
     std::vector<std::vector<int>> flow;
     std::vector<std::vector<int>> capacity;
     std::vector<std::vector<int>> distance;
+    std::vector<std::vector<int>> cost;
     std::vector<int> node_id;
     int source;
     int sink;

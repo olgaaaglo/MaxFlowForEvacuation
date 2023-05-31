@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Graph.hpp"
 #include "FordFulkerson.hpp"
+#include "MinimumCost.hpp"
 
 int main()
 {
@@ -137,13 +138,21 @@ int main()
 
 ////////////////////////////////////////////////////////////
 
+    // Graph& graph = graph2;
+    // graph.saveInputToFile(adj2, nodes2);
+    // graph.saveAdjAndCapacityForNodesToFile();    
+    // FordFulkerson fordFulkerson;
+    // std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
+    // graph.printTimesForFlows();
+    // graph.printNrPeopleInEachExit();
+    // graph.saveToFile();
+
+/////////////////////////
+
     Graph& graph = graph2;
-    graph.saveInputToFile(adj2, nodes2);
-    graph.saveAdjAndCapacityForNodesToFile();    
-    FordFulkerson fordFulkerson;
-    std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
+    MinimumCost minimumCost;
+    std::cout << "Max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
     graph.printTimesForFlows();
     graph.printNrPeopleInEachExit();
-    graph.saveToFile();
 
 }
