@@ -138,21 +138,104 @@ int main()
 
 ////////////////////////////////////////////////////////////
 
-    // Graph& graph = graph2;
+ const int T5 = 7;
+
+    const int nrPeopleInEachRoom5 = 3;
+
+    std::vector<std::vector<std::pair<int, int>>> adj5(27, std::vector<std::pair<int, int>>(27));
+    std::vector<std::pair<int, int>> nodes5(27);
+    for (int i = 0; i < 16; ++i)
+    {
+      nodes5[i] = {nrPeopleInEachRoom5, 15};
+      if (i < 4)
+        adj5[i][i + 16] = {1, 5};
+      else if (i < 12)
+        adj5[i][i + 13] = {1, 5};
+      else if (i < 16)
+        adj5[i][i + 10] = {1, 5};
+    }
+    for (int i = 16; i < 26; ++i)
+    {
+      nodes5[i] = {0, 1};
+      if (i != 20 and i != 25)
+      {
+        adj5[i][i + 1] = {1, 3};
+      }
+      if (i != 15 and i != 20)
+      {
+          adj5[i + 1][i] = {1, 3};
+      }
+    }
+    nodes5[26] = {0, infinity};
+    adj5[25][20] = {3, 3};
+    adj5[21][16] = {3, 3};
+    adj5[20][26] = {1, 5};
+    adj5[16][26] = {1, 5};
+
+    
+    Graph graph5(adj5, nodes5, T5, t);
+
+////////////////////////////////////////////   
+
+const int T6 = 30;
+
+const int nrPeopleInEachRoom6 = 10;
+
+std::vector<std::vector<std::pair<int, int>>> adj6(27, std::vector<std::pair<int, int>>(27));
+std::vector<std::pair<int, int>> nodes6(27);
+for (int i = 0; i < 16; ++i)
+{
+  nodes6[i] = {nrPeopleInEachRoom6, 15};
+  if (i < 2)
+    adj6[i][i + 16] = {1, 5};
+  else if (i < 4)
+    adj6[i][i + 17] = {1, 5};
+  else if (i < 10)
+    adj6[i][i + 13] = {1, 5};
+  else if (i < 12)
+    adj6[i][i + 14] = {1, 5};
+  else if (i < 16)
+    adj6[i][i + 10] = {1, 5};
+}
+
+for (int i = 16; i < 26; ++i)
+{
+  nodes6[i] = {0, 1};
+  if (i != 20 and i != 25)
+  {
+    adj6[i][i + 1] = {1, 3};
+  }
+  if (i != 15 and i != 20)
+  {
+    adj6[i + 1][i] = {1, 3};
+  }
+}
+nodes6[26] = {0, infinity};
+
+adj6[23][18] = {3, 3};
+adj6[21][16] = {3, 3};
+adj6[20][26] = {1, 5};
+adj6[16][26] = {1, 5};
+
+Graph graph6(adj6, nodes6, T6, t);
+
+//////////////////////////////////////////////////    
+
+    Graph& graph = graph5;
     // graph.saveInputToFile(adj2, nodes2);
-    // graph.saveAdjAndCapacityForNodesToFile();    
-    // FordFulkerson fordFulkerson;
-    // std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
-    // graph.printTimesForFlows();
-    // graph.printNrPeopleInEachExit();
-    // graph.saveToFile();
+    graph.saveAdjAndCapacityForNodesToFile();    
+    FordFulkerson fordFulkerson;
+    std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
+    graph.printTimesForFlows();
+    graph.printNrPeopleInEachExit();
+    graph.saveToFile();
 
 /////////////////////////
 
-    Graph& graph = graph2;
-    MinimumCost minimumCost;
-    std::cout << "Min cost max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
-    graph.printTimesForFlows();
-    graph.printNrPeopleInEachExit();
+    // Graph& graph = graph5;
+    // MinimumCost minimumCost;
+    // std::cout << "Min cost max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
+    // graph.printTimesForFlows();
+    // graph.printNrPeopleInEachExit();
 
 }
