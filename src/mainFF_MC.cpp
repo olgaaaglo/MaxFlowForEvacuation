@@ -29,7 +29,7 @@ int main()
 
 //////////////////////////////////////////////
 
-    const int T2 = 7;
+    const int T2 = 9;
     t = 6;
 
     std::vector<std::vector<std::pair<int, int>>> adj2 = {
@@ -42,7 +42,7 @@ int main()
     };
 
     std::vector<std::pair<int, int>> nodes2 = {
-        {{15, 15}, {10, 15}, {10, 15}, {0, 1}, {0, 1}, {0, infinity}}
+        {{25, 25}, {25, 25}, {15, 15}, {0, 1}, {0, 1}, {0, infinity}}
     };
 
     Graph graph2(adj2, nodes2, T2, t);
@@ -138,9 +138,9 @@ int main()
 
 ////////////////////////////////////////////////////////////
 
- const int T5 = 7;
+ const int T5 = 18;
 
-    const int nrPeopleInEachRoom5 = 3;
+    const int nrPeopleInEachRoom5 = 10;
 
     std::vector<std::vector<std::pair<int, int>>> adj5(27, std::vector<std::pair<int, int>>(27));
     std::vector<std::pair<int, int>> nodes5(27);
@@ -167,7 +167,7 @@ int main()
       }
     }
     nodes5[26] = {0, infinity};
-    adj5[25][20] = {3, 3};
+    // adj5[25][20] = {3, 3}; // gdy zakomentowane - zablokowana klatka
     adj5[21][16] = {3, 3};
     adj5[20][26] = {1, 5};
     adj5[16][26] = {1, 5};
@@ -177,7 +177,7 @@ int main()
 
 ////////////////////////////////////////////   
 
-const int T6 = 30;
+const int T6 = 21;
 
 const int nrPeopleInEachRoom6 = 10;
 
@@ -221,21 +221,24 @@ Graph graph6(adj6, nodes6, T6, t);
 
 //////////////////////////////////////////////////    
 
-    Graph& graph = graph5;
-    // graph.saveInputToFile(adj2, nodes2);
-    graph.saveAdjAndCapacityForNodesToFile();    
-    FordFulkerson fordFulkerson;
-    std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
-    graph.printTimesForFlows();
-    graph.printNrPeopleInEachExit();
-    graph.saveToFile();
+    // Graph& graph = graph5;
+    // // graph.saveInputToFile(adj2, nodes2);
+    // graph.saveAdjAndCapacityForNodesToFile();    
+    // FordFulkerson fordFulkerson;
+    // std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
+    // graph.printTimesForFlows();
+    // graph.printNrPeopleInEachExit();
+    // graph.saveToFile();
 
 /////////////////////////
 
-    // Graph& graph = graph5;
-    // MinimumCost minimumCost;
-    // std::cout << "Min cost max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
-    // graph.printTimesForFlows();
-    // graph.printNrPeopleInEachExit();
+    Graph& graph = graph5;
+    MinimumCost minimumCost;
+    std::cout << "Min cost max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
+    graph.printTimesForFlows();
+    graph.printNrPeopleInEachExit();
+
+
+    // graph3.saveCostToFile();
 
 }

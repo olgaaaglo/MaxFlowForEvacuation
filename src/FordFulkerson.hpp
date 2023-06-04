@@ -47,7 +47,7 @@ private:
                 graph.flow[p[v]][p[v+1]] += augmentingPathCapacity;
             }
             else
-            {
+            {std::cout << "!!!!!" << std::endl;
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
             }
         }
@@ -65,7 +65,7 @@ private:
                 }
                 else if (graph.capacity[u][v] != 0)
                 {
-                    residualCapacity[v][u] = graph.flow[u][v];
+                    // residualCapacity[v][u] = graph.flow[u][v];
                 }
                 else
                 {
@@ -91,6 +91,10 @@ private:
         for (auto u = 0; u < p.size(); ++u)
         {
             pathFile << node_id[p[u]] << " ";
+            if (u > 0 and node_id[p[u]] % 100 < node_id[p[u - 1]] % 100)
+            {
+                std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
+            }
         }
         pathFile << std::endl;
             

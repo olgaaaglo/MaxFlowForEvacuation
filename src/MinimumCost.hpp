@@ -8,6 +8,7 @@
 #include <deque>
 
 constexpr int inf = 1000000;
+std::ofstream file("../out/log.txt");
 
 class MinimumCost
 {
@@ -52,7 +53,7 @@ private:
                 graph.flow[p[v]][p[v+1]] += augmentingPathCapacity;
             }
             else
-            {
+            {std::cout << "!!!!!" << std::endl;
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
             }
             
@@ -77,7 +78,7 @@ private:
                 }
                 else if (graph.capacity[u][v] != 0)
                 {
-                    residualCapacity[v][u] = graph.flow[u][v];
+                    // residualCapacity[v][u] = graph.flow[u][v];
                 }
                 else
                 {
@@ -89,7 +90,7 @@ private:
 
     std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, Graph& graph, std::ofstream& pathFile)
     {
-        std::vector<int> parent = getParent(capacity, graph.source, graph.sink, graph.cost);
+        std::vector<int> parent = getParent(capacity, graph.source, graph.sink, graph.cost, graph);
 
         auto v = graph.sink;
         std::deque<int> p = {v};
@@ -103,13 +104,17 @@ private:
         for (auto u = 0; u < p.size(); ++u)
         {
             pathFile << graph.node_id[p[u]] << " ";
+            if (u > 0 and graph.node_id[p[u]] % 100 < graph.node_id[p[u - 1]] % 100)
+            {
+                std::cout << "<<<<<<< " << "  " << graph.node_id[p[u]] << " " << graph.node_id[p[u - 1]] << std::endl;
+            }
         }
         pathFile << std::endl;
             
         return p.size() == 1 ? std::deque<int>{} : p;
     }
 
-    std::vector<int> getParent(const std::vector<std::vector<int>>& capacity, int s, int t, const std::vector<std::vector<int>>& cost)
+    std::vector<int> getParent(const std::vector<std::vector<int>>& capacity, int s, int t, const std::vector<std::vector<int>>& cost, Graph& graph)
     {
         //std::cout << "parent " << std::endl;
         std::vector<int> parent(capacity.size(), -1);
@@ -129,8 +134,9 @@ private:
                 break;
             for (int u = 0; u < capacity.size(); ++u)
             {
-                // if (capacity[v][u] > 0)
-                //     std::cout << "while " << v << " " << u << " " << distance[u] << " " << distance[v] << " " << cost[v][u] << std::endl;
+                if (capacity[v][u] > 0)
+                    file << "while " << v << " " << u << " " << distance[u] << " " << distance[v] << " " << cost[v][u] << " "
+                        << graph.node_id[v] << " " << graph.node_id[u] << std::endl;
                 if (capacity[v][u] != 0 and distance[u] > distance[v] + cost[v][u])
                 {
                     distance[u] = distance[v] + cost[v][u];

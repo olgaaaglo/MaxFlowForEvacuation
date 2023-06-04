@@ -167,9 +167,9 @@ Graph graph4(cap4, 0, 29, time4, T4);
 
 ////////////////////////////////////////////
 
-const int T5 = 7;
+const int T5 = 31;
 
-    const int nrPeopleInEachRoom5 = 15;
+    const int nrPeopleInEachRoom5 = 10;
 
     std::vector<std::vector<std::pair<int, int>>> adj5(27, std::vector<std::pair<int, int>>(27));
     std::vector<std::pair<int, int>> nodes5(27);
@@ -196,7 +196,7 @@ const int T5 = 7;
       }
     }
     nodes5[26] = {0, infinity};
-    adj5[25][20] = {3, 3};
+    // adj5[25][20] = {3, 3};
     adj5[21][16] = {3, 3};
     adj5[20][26] = {1, 5};
     adj5[16][26] = {1, 5};
@@ -208,7 +208,7 @@ const int T5 = 7;
 
 //////////////////////////////////////////////    
 
-const int T6 = 30;
+const int T6 = 18;
 
 const int nrPeopleInEachRoom6 = 10;
 
@@ -251,11 +251,11 @@ adj6[16][26] = {1, 5};
 nrSourceNodes = 16;
 auto [cap6, time6] = addNode0(adj6, nrSourceNodes);
 Graph graph6(cap6, 0, 27, time6, T6);
-graph6.printVec(cap6);
+// graph6.printVec(cap6);
 
 /////////////////////////////////////////////////////
 
-  Graph& graph = graph6;
+  Graph& graph = graph5;
   MinimumCost minimumCost;
   
   std::cout << "Min cost static flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;

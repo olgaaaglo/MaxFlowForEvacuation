@@ -118,12 +118,12 @@ public:
     }
 
     void assignCost()
-    {
+    {//std::cout << "nrNodes " << nrNodes << std::endl;
         for (int i = 0; i < capacity.size(); ++i)
         {
             for (int j = 0; j < capacity.size(); ++j)
             {
-                if (capacity[i][j] > 0 and node_id[j] == 7)
+                if (capacity[i][j] > 0 and node_id[j] == (nrNodes + 1))
                 {
                     cost[i][j] = node_id[i] % 100;
                 }
@@ -283,6 +283,26 @@ public:
             {
                 file << flow[v][u];
                 if (u < flow[v].size() - 1)
+                {
+                    file << " ";
+                }
+            }
+            file << std::endl;
+        }
+
+        file.close();
+    }
+
+    void saveCostToFile()
+    {
+        std::ofstream file("../out/cost.txt");
+
+        for (auto v = 0; v < cost.size(); ++v)
+        {
+            for (auto u = 0; u < cost[v].size(); ++u)
+            {
+                file << cost[v][u];
+                if (u < cost[v].size() - 1)
                 {
                     file << " ";
                 }
