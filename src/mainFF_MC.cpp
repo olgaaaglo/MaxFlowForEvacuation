@@ -202,7 +202,7 @@ for (int i = 0; i < 16; ++i)
 for (int i = 16; i < 26; ++i)
 {
   nodes6[i] = {0, infinity}; //{0, 1};
-  if (i != 20 and i != 25)
+  if (i != 20 and i != 25 and i != 24 and i != 23)
   {
     adj6[i][i + 1] = {1, 3};
   }
@@ -257,7 +257,7 @@ const int T7 = 30;
     };
 
     std::vector<std::pair<int, int>> nodes7 = {
-        {{15, 15}, {10, 15}, {10, 15}, {0, 5}, {0, 5}, {0, infinity}}
+        {{15, 15}, {10, 15}, {10, 15}, {0, infinity}, {0, infinity}, {0, infinity}}
     };
 
     Graph graph7(adj7, nodes7, T7, t);

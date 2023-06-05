@@ -145,7 +145,6 @@ private:
                     {
                         visited[u] = true;
                         queue.push(u);
-                        // std::cout << "push " << std::endl;
                     } 
                     // std::cout << "if " << distance[u] << " " << parent[u] << std::endl;
                 }
