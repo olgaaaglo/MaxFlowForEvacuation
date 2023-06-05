@@ -33,15 +33,15 @@ public:
 private:
     void updateFlow(const std::deque<int>& p, Graph& graph)
     {
-        // const auto augmentingPathCapacity = 1;
-        auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
-        for (auto v = 1; v < p.size() - 1; ++v)
-        {
-            if (residualCapacity[p[v]][p[v+1]] < augmentingPathCapacity)
-            {
-                augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
-            }
-        }
+        const auto augmentingPathCapacity = 1;
+        // auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
+        // for (auto v = 1; v < p.size() - 1; ++v)
+        // {
+        //     if (residualCapacity[p[v]][p[v+1]] < augmentingPathCapacity)
+        //     {
+        //         augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
+        //     }
+        // }
 
         for (auto v = 0; v < p.size() - 1; ++v)
         {
@@ -98,10 +98,10 @@ private:
             pathFile << node_id[p[u]] << " ";
             // if (u < p.size() - 1)
             //     pathFile << capacity[p[u]][p[u + 1]] << " ";
-            if (u > 0 and node_id[p[u]] % 100 < node_id[p[u - 1]] % 100)
-            {
-                std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
-            }
+            // if (u > 0 and node_id[p[u]] % 100 < node_id[p[u - 1]] % 100)
+            // {
+            //     std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
+            // }
         }
         pathFile << std::endl;
             
@@ -131,7 +131,7 @@ private:
                 if (capacity[v][u] != 0 and distance[u] == 1000000000) //and node_id[u] / 100 != node_id[parent[v]] / 100
                 {
                     possibleNextNodes.push_back(u);
-                    file2 << "while " << node_id[v] << " " << node_id[u] << " " << distance[u] << " " << distance[v] << " " << node_id[parent[v]] << std::endl;
+                    file2 << "while " << node_id[v] << " " << node_id[u] << " " << " " << node_id[parent[v]] << std::endl;
                 }
                 // if (capacity[v][u] != 0 and distance[u] == 1000000000)
                 // {

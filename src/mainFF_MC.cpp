@@ -139,7 +139,7 @@ int main()
 
 ////////////////////////////////////////////////////////////
 
- const int T5 = 18;
+ const int T5 = 120;
 
     const int nrPeopleInEachRoom5 = 10;
 
@@ -157,7 +157,7 @@ int main()
     }
     for (int i = 16; i < 26; ++i)
     {
-      nodes5[i] = {0, 1};
+      nodes5[i] = {0, infinity}; //{0, 1};
       if (i != 20 and i != 25)
       {
         adj5[i][i + 1] = {1, 3};
@@ -168,7 +168,7 @@ int main()
       }
     }
     nodes5[26] = {0, infinity};
-    // adj5[25][20] = {3, 3}; // gdy zakomentowane - zablokowana klatka
+    adj5[25][20] = {3, 3}; // gdy zakomentowane - zablokowana klatka
     adj5[21][16] = {3, 3};
     adj5[20][26] = {1, 5};
     adj5[16][26] = {1, 5};
@@ -178,7 +178,7 @@ int main()
 
 ////////////////////////////////////////////   
 
-const int T6 = 33;
+const int T6 = 100;
 
 const int nrPeopleInEachRoom6 = 10;
 
@@ -201,7 +201,7 @@ for (int i = 0; i < 16; ++i)
 
 for (int i = 16; i < 26; ++i)
 {
-  nodes6[i] = {0, 1};
+  nodes6[i] = {0, infinity}; //{0, 1};
   if (i != 20 and i != 25)
   {
     adj6[i][i + 1] = {1, 3};
@@ -214,7 +214,7 @@ for (int i = 16; i < 26; ++i)
 nodes6[26] = {0, infinity};
 
 adj6[23][18] = {3, 3};
-// adj6[21][16] = {3, 3};
+adj6[21][16] = {3, 3};
 adj6[20][26] = {1, 5};
 adj6[16][26] = {1, 5};
 
@@ -257,14 +257,14 @@ const int T7 = 30;
     };
 
     std::vector<std::pair<int, int>> nodes7 = {
-        {{15, 15}, {10, 15}, {10, 15}, {0, infinity}, {0, infinity}, {0, infinity}}
+        {{15, 15}, {10, 15}, {10, 15}, {0, 5}, {0, 5}, {0, infinity}}
     };
 
     Graph graph7(adj7, nodes7, T7, t);
 ///////////////////////////////////////
 
     srand(time(NULL));
-    Graph& graph = graph7;   
+    Graph& graph = graph6;
     MonteCarlo monteCarlo;
     std::cout << "Max flow = " << monteCarlo.computeMaxFlow(graph) << std::endl << std::endl;
     graph.printTimesForFlows();
