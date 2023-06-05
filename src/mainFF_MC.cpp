@@ -2,6 +2,7 @@
 #include "Graph.hpp"
 #include "FordFulkerson.hpp"
 #include "MinimumCost.hpp"
+#include "MonteCarlo.hpp"
 
 int main()
 {
@@ -29,7 +30,7 @@ int main()
 
 //////////////////////////////////////////////
 
-    const int T2 = 9;
+    const int T2 = 30;
     t = 6;
 
     std::vector<std::vector<std::pair<int, int>>> adj2 = {
@@ -42,7 +43,7 @@ int main()
     };
 
     std::vector<std::pair<int, int>> nodes2 = {
-        {{25, 25}, {25, 25}, {15, 15}, {0, 1}, {0, 1}, {0, infinity}}
+        {{15, 15}, {10, 15}, {10, 15}, {0, 1}, {0, 1}, {0, infinity}}
     };
 
     Graph graph2(adj2, nodes2, T2, t);
@@ -177,7 +178,7 @@ int main()
 
 ////////////////////////////////////////////   
 
-const int T6 = 21;
+const int T6 = 33;
 
 const int nrPeopleInEachRoom6 = 10;
 
@@ -213,7 +214,7 @@ for (int i = 16; i < 26; ++i)
 nodes6[26] = {0, infinity};
 
 adj6[23][18] = {3, 3};
-adj6[21][16] = {3, 3};
+// adj6[21][16] = {3, 3};
 adj6[20][26] = {1, 5};
 adj6[16][26] = {1, 5};
 
@@ -221,7 +222,7 @@ Graph graph6(adj6, nodes6, T6, t);
 
 //////////////////////////////////////////////////    
 
-    // Graph& graph = graph5;
+    // Graph& graph = graph2;
     // // graph.saveInputToFile(adj2, nodes2);
     // graph.saveAdjAndCapacityForNodesToFile();    
     // FordFulkerson fordFulkerson;
@@ -232,13 +233,41 @@ Graph graph6(adj6, nodes6, T6, t);
 
 /////////////////////////
 
-    Graph& graph = graph5;
-    MinimumCost minimumCost;
-    std::cout << "Min cost max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
-    graph.printTimesForFlows();
-    graph.printNrPeopleInEachExit();
+    // Graph& graph = graph6;
+    // MinimumCost minimumCost;
+    // std::cout << "Min cost max flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;
+    // graph.printTimesForFlows();
+    // graph.printNrPeopleInEachExit();
 
 
     // graph3.saveCostToFile();
+
+///////////////////////////////
+
+const int T7 = 30;
+    t = 6;
+
+    std::vector<std::vector<std::pair<int, int>>> adj7 = {
+        {{0, 0}, {0, 0}, {0, 0}, {1, 5}, {0, 0}, {0, 0}},
+        {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {1, 5}, {0, 0}},
+        {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {1, 5}, {0, 0}},
+        {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {2, 3}, {2, 6}},
+        {{0, 0}, {0, 0}, {0, 0}, {2, 3}, {0, 0}, {1, 2}},
+        {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}}
+    };
+
+    std::vector<std::pair<int, int>> nodes7 = {
+        {{15, 15}, {10, 15}, {10, 15}, {0, infinity}, {0, infinity}, {0, infinity}}
+    };
+
+    Graph graph7(adj7, nodes7, T7, t);
+///////////////////////////////////////
+
+    srand(time(NULL));
+    Graph& graph = graph7;   
+    MonteCarlo monteCarlo;
+    std::cout << "Max flow = " << monteCarlo.computeMaxFlow(graph) << std::endl << std::endl;
+    graph.printTimesForFlows();
+    graph.printNrPeopleInEachExit();
 
 }

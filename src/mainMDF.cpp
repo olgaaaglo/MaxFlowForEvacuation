@@ -208,7 +208,7 @@ const int T5 = 31;
 
 //////////////////////////////////////////////    
 
-const int T6 = 18;
+const int T6 = 33;
 
 const int nrPeopleInEachRoom6 = 10;
 
@@ -244,7 +244,7 @@ for (int i = 16; i < 26; ++i)
 nodes6[26] = {0, infinity};
 
 adj6[23][18] = {3, 3};
-adj6[21][16] = {3, 3};
+// adj6[21][16] = {3, 3};
 adj6[20][26] = {1, 5};
 adj6[16][26] = {1, 5};
 
@@ -255,7 +255,7 @@ Graph graph6(cap6, 0, 27, time6, T6);
 
 /////////////////////////////////////////////////////
 
-  Graph& graph = graph5;
+  Graph& graph = graph6;
   MinimumCost minimumCost;
   
   std::cout << "Min cost static flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;

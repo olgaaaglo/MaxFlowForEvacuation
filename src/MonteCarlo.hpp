@@ -7,9 +7,9 @@
 #include "Graph.hpp"
 #include <deque>
 
-std::ofstream fileFF("../out/logFF.txt");
+std::ofstream file2("../out/log.txt");
 
-class FordFulkerson
+class MonteCarlo
 {
 public:
     int computeMaxFlow(Graph& graph)
@@ -33,6 +33,7 @@ public:
 private:
     void updateFlow(const std::deque<int>& p, Graph& graph)
     {
+        // const auto augmentingPathCapacity = 1;
         auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
         for (auto v = 1; v < p.size() - 1; ++v)
         {
@@ -64,6 +65,7 @@ private:
                 if (graph.capacity[v][u] != 0)
                 {
                     residualCapacity[v][u] = graph.capacity[v][u] - graph.flow[v][u];
+                    // file2 << graph.node_id[v] << " " << graph.node_id[u] << " " << graph.capacity[v][u] << " " << graph.flow[v][u] << std::endl;
                 }
                 else if (graph.capacity[u][v] != 0)
                 {
@@ -75,6 +77,7 @@ private:
                 }
             }
         }
+        // file2 << std::endl;
     }
 
     std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, int s, int t, const std::vector<int>& node_id, std::ofstream& pathFile)
@@ -93,6 +96,8 @@ private:
         for (auto u = 0; u < p.size(); ++u)
         {
             pathFile << node_id[p[u]] << " ";
+            // if (u < p.size() - 1)
+            //     pathFile << capacity[p[u]][p[u + 1]] << " ";
             if (u > 0 and node_id[p[u]] % 100 < node_id[p[u - 1]] % 100)
             {
                 std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
@@ -105,6 +110,7 @@ private:
 
     std::vector<int> getParent(const std::vector<std::vector<int>>& capacity, int s, int t, const std::vector<int>& node_id)
     {
+        file2 << "getParent" << std::endl;
         std::vector<int> parent(capacity.size(), -1);
         std::vector<int> distance(capacity.size(), 1000000000);
         distance[s] = 0;
@@ -118,18 +124,31 @@ private:
             queue.pop();
             if (v == t)
                 break;
+            std::vector<int> possibleNextNodes;
             for (int u = 0; u < capacity.size(); ++u)
             {
-                // if (capacity[v][u] > 0)
-                //     std::cout << "while " << v << " " << u << " " << distance[u] << " " << distance[v] << std::endl;
-                if (capacity[v][u] != 0 and distance[u] == 1000000000)
+                file2 << "before " << node_id[v] << " " << node_id[u] << " " << capacity[v][u] << std::endl;
+                if (capacity[v][u] != 0 and distance[u] == 1000000000) //and node_id[u] / 100 != node_id[parent[v]] / 100
                 {
-                    fileFF << "while " << node_id[v] << " " << node_id[u] << " " << distance[u] << " " << distance[v] << " " << node_id[parent[v]] << std::endl;
-                    distance[u] = distance[v] + 1;
-                    parent[u] = v;
-                    queue.push(u);
-                    // std::cout << "if " << distance[u] << " " << parent[u] << std::endl;
+                    possibleNextNodes.push_back(u);
+                    file2 << "while " << node_id[v] << " " << node_id[u] << " " << distance[u] << " " << distance[v] << " " << node_id[parent[v]] << std::endl;
                 }
+                // if (capacity[v][u] != 0 and distance[u] == 1000000000)
+                // {
+                //     distance[u] = distance[v] + 1;
+                //     parent[u] = v;
+                //     queue.push(u);
+                //     // std::cout << "if " << distance[u] << " " << parent[u] << std::endl;
+                // }
+            }
+            if (possibleNextNodes.size() > 0)
+            {
+                const auto idx = std::rand() % possibleNextNodes.size();
+                const auto nextNode = possibleNextNodes[idx];
+                distance[nextNode] = distance[v] + 1;
+                parent[nextNode] = v;
+                queue.push(nextNode);
+                possibleNextNodes.clear();
             }
         }
         return parent;
