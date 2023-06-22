@@ -71,7 +71,7 @@ int main()
 
   int nrSourceNodes = 3;
   auto [cap2, time2] = addNode0(adj2, nrSourceNodes);
-  int T2 = 7;
+  int T2 = 13;
   Graph graph2(cap2, 0, 6, time2, T2);
 //   graph2.printVec(cap2);
 
@@ -167,7 +167,7 @@ Graph graph4(cap4, 0, 29, time4, T4);
 
 ////////////////////////////////////////////
 
-const int T5 = 31;
+const int T5 = 18;
 
     const int nrPeopleInEachRoom5 = 10;
 
@@ -208,7 +208,7 @@ const int T5 = 31;
 
 //////////////////////////////////////////////    
 
-const int T6 = 33;
+const int T6 = 18;
 
 const int nrPeopleInEachRoom6 = 10;
 
@@ -244,7 +244,7 @@ for (int i = 16; i < 26; ++i)
 nodes6[26] = {0, infinity};
 
 adj6[23][18] = {3, 3};
-// adj6[21][16] = {3, 3};
+adj6[21][16] = {3, 3};
 adj6[20][26] = {1, 5};
 adj6[16][26] = {1, 5};
 
@@ -255,7 +255,7 @@ Graph graph6(cap6, 0, 27, time6, T6);
 
 /////////////////////////////////////////////////////
 
-  Graph& graph = graph6;
+  Graph& graph = graph5;
   MinimumCost minimumCost;
   
   std::cout << "Min cost static flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;

@@ -20,7 +20,7 @@ public:
         auto augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id, pathFile);
         while (augmentingPath.size() > 0)
         {
-            updateFlow(augmentingPath, graph);
+            updateFlow(augmentingPath, graph, pathFile);
             updateResidualCapacity(graph);
             
             augmentingPath = bfs(residualCapacity, graph.source, graph.sink, graph.node_id, pathFile);
@@ -31,7 +31,7 @@ public:
     }
 
 private:
-    void updateFlow(const std::deque<int>& p, Graph& graph)
+    void updateFlow(const std::deque<int>& p, Graph& graph, std::ofstream& pathFile)
     {
         auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
         for (auto v = 1; v < p.size() - 1; ++v)
@@ -41,6 +41,8 @@ private:
                 augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
             }
         }
+
+        pathFile << "flow: " << augmentingPathCapacity << std::endl;
 
         for (auto v = 0; v < p.size() - 1; ++v)
         {
@@ -70,7 +72,9 @@ private:
                     // residualCapacity[v][u] = graph.flow[u][v];
                 }
                 else
-                {
+                {//std::cout << "??????????" << std::endl;
+                    if (residualCapacity[v][u] != 0)
+                        std::cout << "??????????" << std::endl;
                     residualCapacity[v][u] = 0;
                 }
             }
@@ -95,10 +99,10 @@ private:
             pathFile << node_id[p[u]] << " ";
             if (u > 0 and node_id[p[u]] % 100 < node_id[p[u - 1]] % 100)
             {
-                std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
+                // std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
             }
         }
-        pathFile << std::endl;
+        // pathFile << std::endl;
             
         return p.size() == 1 ? std::deque<int>{} : p;
     }

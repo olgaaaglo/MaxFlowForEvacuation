@@ -176,23 +176,34 @@ public:
         file.close();
     }
 
-    void printTimesForFlows()
+    int getTimesForFlows(bool shouldPrint=true)
     {
         std::ofstream file("../out/peopleEvacuatedInTimeUnit.txt");
         int t = 1;
+        int t_max = 0;
         for (int i = 2 * nrNodes; i <= (T + 1) * nrNodes; i += nrNodes)
         {
             if (flow[i][sink] != 0)
             {
-                std::cout << "id: " << node_id[i] 
-                    << " - " << flow[i][sink] << " people " 
-                    << "evacuated in " << t * time_interval << "s" << std::endl;
+                if (shouldPrint)
+                {
+                    std::cout << "id: " << node_id[i] 
+                        << " - " << flow[i][sink] << " people " 
+                        << "evacuated in " << t * time_interval << "s" << std::endl;
+                }
                 file << t * time_interval << " " << flow[i][sink] << std::endl;
+
+                t_max = t * time_interval;
             }
             ++t;
         }
-        std::cout << std::endl;
+        if (shouldPrint)
+        {
+            std::cout << std::endl;
+        }
         file.close();
+
+        return t_max;
     }
 
     void printNrPeopleInEachExit() 

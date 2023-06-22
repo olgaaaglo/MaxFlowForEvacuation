@@ -43,6 +43,7 @@ private:
             {
                 augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
             }
+            // std::cout << "cap " << residualCapacity[p[v]][p[v+1]] << std::endl;
         }
 
         int chainTravelTime{0};
@@ -106,7 +107,7 @@ private:
             pathFile << graph.node_id[p[u]] << " ";
             if (u > 0 and graph.node_id[p[u]] % 100 < graph.node_id[p[u - 1]] % 100)
             {
-                std::cout << "<<<<<<< " << "  " << graph.node_id[p[u]] << " " << graph.node_id[p[u - 1]] << std::endl;
+                // std::cout << "<<<<<<< " << "  " << graph.node_id[p[u]] << " " << graph.node_id[p[u - 1]] << std::endl;
             }
         }
         pathFile << std::endl;

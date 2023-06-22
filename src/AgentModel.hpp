@@ -9,7 +9,7 @@
 
 std::ofstream file2("../out/log.txt");
 
-class MonteCarlo
+class AgentModel
 {
 public:
     int computeMaxFlow(Graph& graph)
