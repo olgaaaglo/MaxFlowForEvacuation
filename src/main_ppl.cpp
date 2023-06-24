@@ -50,9 +50,6 @@ int main()
         Graph graph5(adj5, nodes5, T5, t);
         Graph& graph = graph5;    
         FordFulkerson fordFulkerson;
-        // std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
-        // graph.getTimesForFlows();
-        // graph.printNrPeopleInEachExit();
 
         int max_flow = fordFulkerson.computeMaxFlow(graph);
         // std::cout << "Max flow = " << max_flow << std::endl << std::endl;

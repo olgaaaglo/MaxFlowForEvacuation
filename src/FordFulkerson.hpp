@@ -7,7 +7,7 @@
 #include "Graph.hpp"
 #include <deque>
 
-std::ofstream fileFF("../out/logFF.txt");
+// std::ofstream fileFF("../out/logFF.txt");
 
 class FordFulkerson
 {
@@ -51,7 +51,7 @@ private:
                 graph.flow[p[v]][p[v+1]] += augmentingPathCapacity;
             }
             else
-            {std::cout << "!!!!!" << std::endl;
+            {
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
             }
         }
@@ -72,9 +72,7 @@ private:
                     // residualCapacity[v][u] = graph.flow[u][v];
                 }
                 else
-                {//std::cout << "??????????" << std::endl;
-                    if (residualCapacity[v][u] != 0)
-                        std::cout << "??????????" << std::endl;
+                {
                     residualCapacity[v][u] = 0;
                 }
             }
@@ -97,12 +95,7 @@ private:
         for (auto u = 0; u < p.size(); ++u)
         {
             pathFile << node_id[p[u]] << " ";
-            if (u > 0 and node_id[p[u]] % 100 < node_id[p[u - 1]] % 100)
-            {
-                // std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
-            }
         }
-        // pathFile << std::endl;
             
         return p.size() == 1 ? std::deque<int>{} : p;
     }
@@ -124,15 +117,12 @@ private:
                 break;
             for (int u = 0; u < capacity.size(); ++u)
             {
-                // if (capacity[v][u] > 0)
-                //     std::cout << "while " << v << " " << u << " " << distance[u] << " " << distance[v] << std::endl;
                 if (capacity[v][u] != 0 and distance[u] == 1000000000)
                 {
-                    fileFF << "while " << node_id[v] << " " << node_id[u] << " " << distance[u] << " " << distance[v] << " " << node_id[parent[v]] << std::endl;
+                    // fileFF << "while " << node_id[v] << " " << node_id[u] << " " << distance[u] << " " << distance[v] << " " << node_id[parent[v]] << std::endl;
                     distance[u] = distance[v] + 1;
                     parent[u] = v;
                     queue.push(u);
-                    // std::cout << "if " << distance[u] << " " << parent[u] << std::endl;
                 }
             }
         }

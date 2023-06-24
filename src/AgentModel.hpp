@@ -7,7 +7,7 @@
 #include "Graph.hpp"
 #include <deque>
 
-std::ofstream file2("../out/log.txt");
+// std::ofstream file2("../out/log.txt");
 
 class AgentModel
 {
@@ -34,14 +34,6 @@ private:
     void updateFlow(const std::deque<int>& p, Graph& graph)
     {
         const auto augmentingPathCapacity = 1;
-        // auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
-        // for (auto v = 1; v < p.size() - 1; ++v)
-        // {
-        //     if (residualCapacity[p[v]][p[v+1]] < augmentingPathCapacity)
-        //     {
-        //         augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
-        //     }
-        // }
 
         for (auto v = 0; v < p.size() - 1; ++v)
         {
@@ -50,7 +42,7 @@ private:
                 graph.flow[p[v]][p[v+1]] += augmentingPathCapacity;
             }
             else
-            {std::cout << "!!!!!" << std::endl;
+            {
                 graph.flow[p[v+1]][p[v]] -= augmentingPathCapacity;
             }
         }
@@ -65,7 +57,6 @@ private:
                 if (graph.capacity[v][u] != 0)
                 {
                     residualCapacity[v][u] = graph.capacity[v][u] - graph.flow[v][u];
-                    // file2 << graph.node_id[v] << " " << graph.node_id[u] << " " << graph.capacity[v][u] << " " << graph.flow[v][u] << std::endl;
                 }
                 else if (graph.capacity[u][v] != 0)
                 {
@@ -77,7 +68,6 @@ private:
                 }
             }
         }
-        // file2 << std::endl;
     }
 
     std::deque<int> bfs(const std::vector<std::vector<int>>& capacity, Graph& graph, std::ofstream& pathFile)
@@ -96,12 +86,6 @@ private:
         for (auto u = 0; u < p.size(); ++u)
         {
             pathFile << graph.node_id[p[u]] << " ";
-            // if (u < p.size() - 1)
-            //     pathFile << capacity[p[u]][p[u + 1]] << " ";
-            // if (u > 0 and node_id[p[u]] % 100 < node_id[p[u - 1]] % 100)
-            // {
-            //     std::cout << "<<<<<<< " << "  " << node_id[p[u]] << " " << node_id[p[u - 1]] << std::endl;
-            // }
         }
         pathFile << std::endl;
             
@@ -110,12 +94,8 @@ private:
 
     std::vector<int> getParent(const std::vector<std::vector<int>>& capacity, int s, int t, Graph& graph)
     {
-        file2 << "getParent" << std::endl;
         std::vector<int> parent(capacity.size(), -1);
-        std::vector<int> distance(capacity.size(), 1000000000);
         std::vector<bool> visited(graph.nrNodes + 2, false);
-        // std::cout << "graph.nrNodes " << graph.nrNodes << std::endl;
-        // distance[s] = 0;
         visited[s] = true;
 
         std::queue<int> queue;
@@ -134,29 +114,19 @@ private:
                 if (graph.node_id[u] == (graph.nrNodes + 1))
                     staticNode = graph.node_id[u];
                     
-                file2 << "before " << graph.node_id[v] << " " << graph.node_id[u] << " " << capacity[v][u] << " " 
-                    << staticNode << " " << visited[staticNode] << " " << graph.node_id[v] / 100 << std::endl;
+                // file2 << "before " << graph.node_id[v] << " " << graph.node_id[u] << " " << capacity[v][u] << " " 
+                //     << staticNode << " " << visited[staticNode] << " " << graph.node_id[v] / 100 << std::endl;
 
-                // file2 << "before " << graph.node_id[v] << " " << graph.node_id[u] << " " << capacity[v][u] << std::endl;
-                //if (capacity[v][u] != 0 and distance[u] == 1000000000) //and node_id[u] / 100 != node_id[parent[v]] / 100
                 if (capacity[v][u] != 0 and (not visited[staticNode] or staticNode == graph.node_id[v] / 100))
                 {
                     possibleNextNodes.push_back(u);
-                    file2 << "while " << graph.node_id[v] << " " << graph.node_id[u] << " " << " " << graph.node_id[parent[v]] << std::endl;
+                    // file2 << "while " << graph.node_id[v] << " " << graph.node_id[u] << " " << " " << graph.node_id[parent[v]] << std::endl;
                 }
-                // if (capacity[v][u] != 0 and distance[u] == 1000000000)
-                // {
-                //     distance[u] = distance[v] + 1;
-                //     parent[u] = v;
-                //     queue.push(u);
-                //     // std::cout << "if " << distance[u] << " " << parent[u] << std::endl;
-                // }
             }
             if (possibleNextNodes.size() > 0)
             {
                 const auto idx = std::rand() % possibleNextNodes.size();
                 const auto nextNode = possibleNextNodes[idx];
-                // distance[nextNode] = distance[v] + 1;
                 visited[graph.node_id[nextNode] / 100] = true;
                 parent[nextNode] = v;
                 queue.push(nextNode);

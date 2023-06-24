@@ -13,12 +13,6 @@
 class Graph
 {
 public:
-    Graph(std::vector<std::vector<int>>& cap, int s, int t) : source{s}, sink{t}
-    {
-        flow.resize(cap.size());
-        std::fill(flow.begin(), flow.end(), std::vector<int>(cap.size(), 0));
-        capacity = cap;
-    }
     Graph(std::vector<std::vector<int>>& cap, int s, int t, std::vector<std::vector<int>>& time, int nr_time_intervals)
         : capacity{cap}, source{s}, sink{t}, cost{time}, T{nr_time_intervals}
     {
@@ -118,7 +112,7 @@ public:
     }
 
     void assignCost()
-    {//std::cout << "nrNodes " << nrNodes << std::endl;
+    {
         for (int i = 0; i < capacity.size(); ++i)
         {
             for (int j = 0; j < capacity.size(); ++j)
@@ -266,8 +260,6 @@ public:
             }
             file << std::endl;
         }
-        // file << "---" << std::endl;
-        // file << source << " " << sink << std::endl;
 
         file.close();
 
