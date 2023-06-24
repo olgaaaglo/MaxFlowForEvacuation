@@ -15,7 +15,19 @@ with open('../out/node_id.txt') as file:
         node_id = [int(l.strip()) for l in line.split(' ')]
         break
 
-graph = nx.DiGraph(adj)
+adj_new = adj
+nodes_to_remove = [600, 105, 106, 107, 206, 207, 306, 307, 406, 407, 507]
+
+for i, row in enumerate(adj_new):
+    for j, edge in enumerate(row):
+        
+        if adj_new[i][j] != 0 and (node_id[i] in nodes_to_remove or node_id[j] in nodes_to_remove):
+            print(node_id[i], node_id[j], node_id[i] in nodes_to_remove, adj_new[i][j])
+            adj_new[i][j] = 0
+            adj_new[j][i] = 0
+
+print(adj_new)
+graph = nx.DiGraph(adj_new)
 
 pos = nx.spring_layout(graph)
 
@@ -34,7 +46,10 @@ for i in range(len(pos)):
 
 node_attrs = {}
 for node in graph.nodes:
-    node_attrs[node] = node_id[node]
+    if node_id[node] in nodes_to_remove:
+        node_attrs[node] = ""
+    else:
+        node_attrs[node] = node_id[node]
 
 labels = nx.get_edge_attributes(graph,'weight')
 for label in labels:
@@ -43,9 +58,16 @@ for label in labels:
     if int(node_id[label[0]] / 100) == 4 and int(node_id[label[1]] / 100) != 6:
         labels[label] = ""
 
-nx.draw(graph, pos, font_size=8, node_color='#a1b56c')
+colors = []
+for node in graph:
+    if node_id[node] in nodes_to_remove:
+        colors.append('white')
+    else: 
+        colors.append('#a1b56c')
+
+nx.draw(graph, pos, font_size=8, node_color=colors)
 nx.draw_networkx_edge_labels(graph, pos, font_size=10, edge_labels=labels, bbox=dict(alpha=0))
 nx.draw_networkx_labels(graph, pos, labels=node_attrs)
 
 plt.draw()
-plt.savefig('../charts/graph_time_expanded.png')
+plt.savefig('../charts/graph_time_expanded_optimal.png')

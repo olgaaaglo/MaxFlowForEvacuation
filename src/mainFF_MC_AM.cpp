@@ -31,7 +31,7 @@ int main()
 
 ////////////////////////////////////////////////////////////
 
-  const int T5 = 30;
+  const int T5 = 50;
   const int nrPeopleInEachRoom5 = 10;
 
   std::vector<std::vector<std::pair<int, int>>> adj5(27, std::vector<std::pair<int, int>>(27));
@@ -48,7 +48,7 @@ int main()
   }
   for (int i = 16; i < 26; ++i)
   {
-    nodes5[i] = {0, 1}; //{0, 1}; //infinity
+    nodes5[i] = {0, infinity}; //{0, 1}; //infinity
     if (i != 20 and i != 25)
     {
       adj5[i][i + 1] = {1, 3};
@@ -69,7 +69,7 @@ int main()
 
 ////////////////////////////////////////////   
 
-const int T6 = 40;
+const int T6 = 50;
 
 const int nrPeopleInEachRoom6 = 10;
 
@@ -92,7 +92,7 @@ for (int i = 0; i < 16; ++i)
 
 for (int i = 16; i < 26; ++i)
 {
-  nodes6[i] = {0, 1}; //{0, 1}; //infinity
+  nodes6[i] = {0, infinity}; //{0, 1}; //infinity
   if (i != 20 and i != 25 and i != 24 and i != 23)
   {
     adj6[i][i + 1] = {1, 3};
@@ -164,12 +164,13 @@ Graph graph7(adj7, nodes7, T7, t);
 
 // srand(time(NULL));
 // double sum = 0;
-// int iter = 5;
+// int iter = 20;
 // int initial = 160;
 // bool isNotInitial = false;
 
 // for (int i = 0; i < iter; ++i)
 // {
+//   // Graph graph5(adj5, nodes5, T5, t);
 //   Graph graph6(adj6, nodes6, T6, t);
 //   Graph& graph = graph6;
 //   AgentModel agentModel;
