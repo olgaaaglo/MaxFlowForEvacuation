@@ -21,7 +21,7 @@ public:
         auto augmentingPath = bfs(residualCapacity, graph, pathFile);
         while (augmentingPath.size() > 0)
         {
-            updateFlow(augmentingPath, graph);
+            updateFlow(augmentingPath, graph, pathFile);
             updateResidualCapacity(graph);
             
             augmentingPath = bfs(residualCapacity, graph, pathFile);
@@ -34,7 +34,7 @@ public:
     int maxDynamicFlow{0};
 
 private:
-    void updateFlow(const std::deque<int>& p, Graph& graph)
+    void updateFlow(const std::deque<int>& p, Graph& graph, std::ofstream& pathFile)
     {
         auto& augmentingPathCapacity = residualCapacity[p[0]][p[1]];
         for (auto v = 1; v < p.size() - 1; ++v)
@@ -44,6 +44,7 @@ private:
                 augmentingPathCapacity = residualCapacity[p[v]][p[v+1]];
             }
         }
+        pathFile << "flow: " << augmentingPathCapacity << std::endl;
 
         int chainTravelTime{0};
         for (auto v = 0; v < p.size() - 1; ++v)
@@ -127,9 +128,6 @@ private:
                 break;
             for (int u = 0; u < capacity.size(); ++u)
             {
-                // if (capacity[v][u] > 0)
-                //     file << "while " << v << " " << u << " " << distance[u] << " " << distance[v] << " " << cost[v][u] << " "
-                //         << graph.node_id[v] << " " << graph.node_id[u] << std::endl;
                 if (capacity[v][u] != 0 and distance[u] > distance[v] + cost[v][u])
                 {
                     distance[u] = distance[v] + cost[v][u];

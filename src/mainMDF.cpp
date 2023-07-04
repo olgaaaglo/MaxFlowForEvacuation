@@ -52,7 +52,7 @@ int main()
 
   int nrSourceNodes = 3;
   auto [cap2, time2] = addNode0(adj2, nrSourceNodes);
-  int T2 = 13;
+  int T2 = 7;
   Graph graph2(cap2, 0, 6, time2, T2);
 
 ////////////////////////////////////////////
@@ -143,7 +143,7 @@ Graph graph6(cap6, 0, 27, time6, T6);
 
 /////////////////////////////////////////////////////
 
-Graph& graph = graph5;
+Graph& graph = graph2;
 MinimumCost minimumCost;
 
 std::cout << "Min cost static flow = " << minimumCost.computeMaxFlow(graph) << std::endl << std::endl;

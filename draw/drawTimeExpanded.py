@@ -34,7 +34,7 @@ for i in range(len(pos)):
 
 node_attrs = {}
 for node in graph.nodes:
-    node_attrs[node] = node_id[node]
+    node_attrs[node] = node_id[node] #node_id[node] #node
 
 labels = nx.get_edge_attributes(graph,'weight')
 for label in labels:

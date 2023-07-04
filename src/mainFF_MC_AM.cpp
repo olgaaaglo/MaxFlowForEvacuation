@@ -48,7 +48,7 @@ int main()
   }
   for (int i = 16; i < 26; ++i)
   {
-    nodes5[i] = {0, infinity}; //{0, 1}; //infinity
+    nodes5[i] = {0, 1}; //{0, 1}; //infinity
     if (i != 20 and i != 25)
     {
       adj5[i][i + 1] = {1, 3};
@@ -92,7 +92,7 @@ for (int i = 0; i < 16; ++i)
 
 for (int i = 16; i < 26; ++i)
 {
-  nodes6[i] = {0, infinity}; //{0, 1}; //infinity
+  nodes6[i] = {0, 1}; //{0, 1}; //infinity
   if (i != 20 and i != 25 and i != 24 and i != 23)
   {
     adj6[i][i + 1] = {1, 3};
@@ -113,13 +113,14 @@ Graph graph6(adj6, nodes6, T6, t);
 
 //////////////////////////////////////////////////    
 
-  Graph& graph = graph2;
+  Graph& graph = graph5;
   // graph.saveInputToFile(adj2, nodes2);
   // graph.saveAdjAndCapacityForNodesToFile();    
   FordFulkerson fordFulkerson;
   std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
   graph.getTimesForFlows();
   graph.printNrPeopleInEachExit();
+  graph.saveNrPeopleInEachExitInEachTimeUnit();
   // graph.saveToFile();
 
 /////////////////////////
@@ -159,6 +160,7 @@ Graph graph7(adj7, nodes7, T7, t);
 // std::cout << "Max flow = " << agentModel.computeMaxFlow(graph) << std::endl << std::endl;
 // graph.getTimesForFlows();
 // graph.printNrPeopleInEachExit();
+// graph.saveNrPeopleInEachExitInEachTimeUnit();
 
 ///////////////////////////////
 

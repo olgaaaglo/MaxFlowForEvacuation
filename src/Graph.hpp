@@ -220,6 +220,31 @@ public:
            std::cout << "Exit " << label << " -> " << value << " people" << std::endl; 
            file << label << "," << value << std::endl;
         }
+        file.close();
+    }
+
+    void saveNrPeopleInEachExitInEachTimeUnit() 
+    {
+        std::ofstream file("../out/nrPeopleInEachExitInEachTimeUnit.txt");
+        for (int i = 2 * nrNodes; i <= (T + 1) * nrNodes; i += nrNodes)
+        {
+            std::map<std::string, int> countNrPeopleInEachExit;
+            for (int j = 0; j < flow.size(); ++j)
+            {
+                if (flow[j][i] != 0)
+                {
+                    const auto label = std::to_string(node_id[j] / 100) + " - " + std::to_string(node_id[i] / 100);
+                    countNrPeopleInEachExit[label] += flow[j][i];
+                }
+            }
+            for (const auto& [label, value] : countNrPeopleInEachExit)
+            {
+                file << label << "," << value << ",";
+            }
+            if (countNrPeopleInEachExit.size() > 0)
+                file << std::endl;
+        }
+        file.close();
     }
 
     void printVec(const std::vector<int>& V)

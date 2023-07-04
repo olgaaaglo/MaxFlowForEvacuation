@@ -22,11 +22,9 @@ for i, row in enumerate(adj_new):
     for j, edge in enumerate(row):
         
         if adj_new[i][j] != 0 and (node_id[i] in nodes_to_remove or node_id[j] in nodes_to_remove):
-            print(node_id[i], node_id[j], node_id[i] in nodes_to_remove, adj_new[i][j])
             adj_new[i][j] = 0
             adj_new[j][i] = 0
 
-print(adj_new)
 graph = nx.DiGraph(adj_new)
 
 pos = nx.spring_layout(graph)

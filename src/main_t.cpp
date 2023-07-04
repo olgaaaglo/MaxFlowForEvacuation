@@ -9,7 +9,7 @@ int main()
     const int infinity = 1000000;
     int t;
 
-    const int T5 = 11;
+    int T5 = 11;
 
     const int nrPeopleInEachRoom5 = 10;
 
@@ -22,6 +22,7 @@ int main()
     // int t16 = 4;
 
     // t = 2;
+    // T5 = 82;
     // int cap2 = 1;
     // int t2 = 1;
     // int cap4 = 1;
@@ -74,4 +75,5 @@ int main()
     std::cout << "Max flow = " << fordFulkerson.computeMaxFlow(graph) << std::endl << std::endl;
     graph.getTimesForFlows();
     graph.printNrPeopleInEachExit();
+    graph.saveNrPeopleInEachExitInEachTimeUnit();
 }
