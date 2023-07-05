@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 times = []
 people = []
 cumulatedPeople = []
+cumulatedPeopleExit0 = []
+cumulatedPeopleExit1 = []
 i = 0
 with open('../out/peopleEvacuatedInTimeUnit.txt') as file:
     for line in file:
@@ -22,6 +24,7 @@ exitLabels = ['17 - 27', '21 - 27']
 nrPeopleExit0 = []
 nrPeopleExit1 = []
 
+j = 0
 with open('../out/nrPeopleInEachExitInEachTimeUnit.txt') as file:
     for line in file:
         splited = line.split(',')
@@ -31,6 +34,13 @@ with open('../out/nrPeopleInEachExitInEachTimeUnit.txt') as file:
             nrPeopleInEachExitInEachTimeUnit[splited[i]] = int(splited[i + 1])
         nrPeopleExit0.append(nrPeopleInEachExitInEachTimeUnit[exitLabels[0]])
         nrPeopleExit1.append(nrPeopleInEachExitInEachTimeUnit[exitLabels[1]])
+        if j == 0:
+            cumulatedPeopleExit0.append(nrPeopleExit0[j])
+            cumulatedPeopleExit1.append(nrPeopleExit1[j])
+        else:
+            cumulatedPeopleExit0.append(cumulatedPeopleExit0[j - 1] + nrPeopleExit0[j])
+            cumulatedPeopleExit1.append(cumulatedPeopleExit1[j - 1] + nrPeopleExit1[j])
+        j += 1
 
 # plt.bar(times, people, width=3)
 plt.bar(times, nrPeopleExit0, width=3)
@@ -47,9 +57,16 @@ plt.ylabel("Liczba ludzi ewakuowanych")
 plt.savefig('../charts/peopleEvacuatedInTimeUnit.png')
 plt.clf()
 
-plt.bar(times, cumulatedPeople, width=3)
+# plt.bar(times, cumulatedPeople, width=3)
+plt.bar(times, cumulatedPeopleExit0, width=3)
+plt.bar(times, cumulatedPeopleExit1, width=3, bottom=cumulatedPeopleExit0)
 for i in range(len(cumulatedPeople)):
-    plt.annotate(str(cumulatedPeople[i]), xy=(times[i],cumulatedPeople[i]), ha='center', va='bottom')
+    # plt.annotate(str(cumulatedPeople[i]), xy=(times[i],cumulatedPeople[i]), ha='center', va='bottom')
+    # if nrPeopleExit0[i] > 0:
+        plt.annotate(str(cumulatedPeopleExit0[i]), xy=(times[i], cumulatedPeopleExit0[i]), ha='center', va='bottom')
+    # if nrPeopleExit1[i] > 0:
+        plt.annotate(str(cumulatedPeopleExit1[i]), xy=(times[i], cumulatedPeopleExit0[i] + cumulatedPeopleExit1[i]), ha='center', va='bottom')
+plt.legend(exitLabels)
 plt.xlabel("Czas ewakuacji [s]")
 plt.ylabel("Skumulowana liczba ludzi ewakuowanych")
 plt.savefig('../charts/cumulatedPeopleEvacuatedInTimeUnit.png')
@@ -65,7 +82,14 @@ with open('../out/nrPeopleInEachExit.txt') as file:
         labels.append(splited[0])
         people.append(int(splited[1]))
 
-plt.bar(labels, people)
+colors = []
+for label in labels:
+    if label == exitLabels[0]:
+        colors.append('tab:blue')
+    else:
+        colors.append('tab:orange')
+
+plt.bar(labels, people, color=colors)
 for i in range(len(people)):
     plt.annotate(str(people[i]), xy=(labels[i],people[i]), ha='center', va='bottom')
 plt.xlabel("Wyjścia ewakuacyjne")

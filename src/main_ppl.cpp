@@ -7,6 +7,7 @@
 int main()
 {
     std::ofstream file("../out/pplVsTime.txt");
+    std::ofstream file2("../out/nrPeopleInEachExitForPplVsTime.txt");
     const int infinity = 1000000;
     int t = 6;
 
@@ -56,5 +57,24 @@ int main()
         int max_time = graph.getTimesForFlows(false);
         // std::cout << "Max time= " <<  max_time << std::endl << std::endl;
         file << max_flow << " " << max_time << std::endl;
+
+        
+        std::map<std::string, int> countNrPeopleInEachExit;
+        for (int i = 2 * graph.nrNodes; i <= (T5 + 1) * graph.nrNodes; i += graph.nrNodes)
+        {
+            for (int j = 0; j < graph.flow.size(); ++j)
+            {
+                if (graph.flow[j][i] != 0)
+                {
+                    const auto label = std::to_string(graph.node_id[j] / 100) + " - " + std::to_string(graph.node_id[i] / 100);
+                    countNrPeopleInEachExit[label] += graph.flow[j][i];
+                }
+            }
+        }
+        for (const auto& [label, value] : countNrPeopleInEachExit)
+        {
+           file2 << value << " ";
+        }
+        file2 << std::endl;
     }
 }
